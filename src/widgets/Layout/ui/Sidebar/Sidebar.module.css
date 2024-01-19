@@ -1,0 +1,15 @@
+.sidebar {
+  @apply h-screen overflow-hidden;
+}
+
+.logo {
+  @apply flex justify-center items-center h-navbar border-b px-2 mb-2;
+}
+
+.logo img {
+  @apply w-full h-full object-contain max-w-24;
+}
+
+.content {
+  height: calc(100% - var(--navbar-height));
+}

@@ -1,0 +1,1 @@
+export { SingleTemplate } from './ui/SingleTemplate.async'

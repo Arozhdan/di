@@ -1,0 +1,21 @@
+.card {
+  @apply cursor-pointer transition h-card hover:border-primary/30;
+}
+.header {
+  @apply pb-2 items-start;
+}
+.headerContent {
+  @apply flex flex-row items-center justify-between space-x-6 w-full;
+}
+.title {
+  @apply line-clamp-1 w-full text-left;
+}
+.history {
+  @apply flex items-center justify-end w-6 h-6 ml-auto text-primary/70 hover:text-primary;
+}
+.link {
+  @apply mt-1 text-xs text-gray-500 underline hover:opacity-70;
+}
+.content {
+  @apply line-clamp-3 overflow-hidden pb-0;
+}

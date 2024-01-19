@@ -1,0 +1,15 @@
+.pageTitle {
+  @apply text-3xl font-semibold;
+}
+
+.sectionTitle {
+  @apply text-xl font-semibold;
+}
+
+.sectionSubtitle {
+  @apply text-lg font-semibold;
+}
+
+.small {
+  @apply text-xs;
+}
