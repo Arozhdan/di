@@ -31,7 +31,7 @@ import {
 } from "@/shared/components/ui/drawer";
 import { Navbar } from "@/widgets/Navbar";
 import { ArrowLeftIcon, BotIcon, PinIcon, StarIcon } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
 import { RoutePath } from "@/app/providers/Router";
 import {
@@ -76,7 +76,6 @@ const defaultValues: FormValues = {
 };
 
 const SingleInstrument = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [pinnedOnly, setPinnedOnly] = useState(false);
   const isInstrumentLoading = useSelector(selectIsInstrumentsListLoading);
@@ -124,7 +123,7 @@ const SingleInstrument = () => {
   }, [history, pinnedOnly])();
 
   if (isInstrumentLoading) return <PageLoader />;
-  if (!instrument) return navigate(RoutePath.instruments);
+  if (!instrument) return null;
 
   return (
     <>
