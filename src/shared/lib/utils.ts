@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { useEffect, useState } from 'react'
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/app/providers/StoreProvider"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -46,4 +48,22 @@ export function useMediaQuery(query: string): boolean {
   }, [query])
 
   return matches
+}
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+
+export const useDebounce = (value: any, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+
+  return debouncedValue
 }

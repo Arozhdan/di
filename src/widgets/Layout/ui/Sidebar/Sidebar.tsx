@@ -1,12 +1,13 @@
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { FC, memo } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, NavLink } from "react-router-dom";
-import { buttonVariants } from "@components/button";
+import { Button, buttonVariants } from "@components/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import {
   Globe2Icon,
   LightbulbIcon,
+  LogOutIcon,
   LucideIcon,
   MoonIcon,
   SunMoonIcon,
@@ -30,6 +31,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { Progress } from "@components/progress";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import { RoutePath } from "@/app/providers/Router";
+import { useSelector } from "react-redux";
+import { User, selectUser } from "@/entities/User";
+import { signout } from "@/features/AuthLocal";
 
 export interface Props extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -42,6 +46,14 @@ export interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
   const { setTheme } = useTheme();
+  const dispatch = useAppDispatch();
+  const user = useSelector(selectUser) as User;
+  const username =
+    user.firstName && user.lastName
+      ? user.firstName
+        ? user.firstName
+        : user.email
+      : user.email;
   const classes = cn(styles.sidebar, className, {
     [styles.collapsed]: isCollapsed,
   });
@@ -227,11 +239,13 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                 <div className="flex group-[[data-collapsed=true]]:justify-center space-x-1 items-center">
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png1" />
-                    <AvatarFallback>AB</AvatarFallback>
+                    <AvatarFallback>
+                      {username.slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                   {isCollapsed ? null : (
                     <span className="font-semibold text-sm whitespace-nowrap">
-                      Arozhdan B.
+                      {username}
                     </span>
                   )}
                 </div>
@@ -248,6 +262,14 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                   <br />
                   <small className="text-xs">(33 / 100)</small>
                   <Progress value={33} className="h-2" />
+                  <Button
+                    variant="link"
+                    className="px-0"
+                    onClick={() => dispatch(signout())}
+                  >
+                    <LogOutIcon size={12} className="mr-1" />
+                    Sign out
+                  </Button>
                 </div>
               </HoverCardContent>
             </HoverCard>

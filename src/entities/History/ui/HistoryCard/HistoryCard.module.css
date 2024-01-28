@@ -8,7 +8,7 @@
   @apply pb-2 items-start;
 }
 .headerContent {
-  @apply flex flex-row items-center justify-between space-x-6 w-full;
+  @apply flex flex-row items-center justify-between space-x-2 w-full;
 }
 .title {
   @apply line-clamp-1 w-full text-left;
@@ -29,11 +29,11 @@
   @apply mt-1 text-xs text-gray-500 underline hover:opacity-70 line-clamp-1;
 }
 .content {
-  @apply overflow-hidden pb-0;
+  @apply !pb-0;
 }
 .footer {
-  @apply mt-auto py-0;
+  @apply mt-auto !py-0;
 }
 .expand {
-  @apply p-0;
+  @apply !p-0;
 }

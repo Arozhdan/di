@@ -5,7 +5,12 @@ import { Reducer } from "redux"
 import { CombinedState, StateSchema, ThunkExtraArg } from "./state.schema"
 import { createReducerManager } from "./reducerManager"
 import { $api } from "@/shared/lib/api"
-import { globalSearchReducer, GlobalSearchSchema } from "@/features/GlobalSearch"
+import { userReducer } from "@/entities/User"
+import { signinLocalReducer } from "@/features/AuthLocal"
+import { globalSearchReducer } from "@/features/GlobalSearch"
+import { instrumentReducer } from "@/entities/Instrument"
+import { siteSettingsReducer } from "@/entities/SiteSettings"
+import { historyReducer } from "@/entities/History"
 
 
 
@@ -17,7 +22,13 @@ export function createReduxStore(
 ) {
   const rootReducers: ReducersMapObject<StateSchema> = {
     ...asyncReducers,
-    globalSearch: globalSearchReducer as Reducer<GlobalSearchSchema | undefined>,
+    globalSearch: globalSearchReducer,
+    auth: userReducer,
+    signinLocal: signinLocalReducer,
+    user: userReducer,
+    instrument: instrumentReducer,
+    siteSettings: siteSettingsReducer,
+    history: historyReducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)

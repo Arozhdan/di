@@ -1,8 +1,10 @@
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Navbar } from "@/widgets/Navbar";
 import { InstrumentsFilters } from "./Filter/InstrumentsFilters";
-import { InstrumentCard } from "@/entities/Instrument";
+import { InstrumentCard, selectInstruments } from "@/entities/Instrument";
+import { useSelector } from "react-redux";
 const Instruments = () => {
+  const instruments = useSelector(selectInstruments);
   return (
     <>
       <Navbar />
@@ -13,25 +15,9 @@ const Instruments = () => {
         </Typography>
         <InstrumentsFilters className="mt-2 mb-4" />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
-          <InstrumentCard />
+          {instruments.map((instrument) => (
+            <InstrumentCard instrument={instrument} key={instrument.id} />
+          ))}
         </div>
       </div>
     </>

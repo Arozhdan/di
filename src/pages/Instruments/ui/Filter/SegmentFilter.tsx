@@ -1,3 +1,9 @@
+import {
+  InstrumentType,
+  instrumentActions,
+  selectInstrumentFilters,
+  selectInstrumentTypes,
+} from "@/entities/Instrument";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -6,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
 import { Separator } from "@/shared/components/ui/separator";
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import {
   Command,
   CommandInput,
@@ -17,24 +23,35 @@ import {
   CommandSeparator,
 } from "@shared/components/ui/command";
 import { CheckIcon, PlusCircleIcon } from "lucide-react";
-import { FC, useState } from "react";
-
-const options = [
-  { label: "Option 1", value: "option1" },
-  { label: "Option 2", value: "option2" },
-  { label: "Option 3", value: "option3" },
-  { label: "Option 4", value: "option4" },
-  { label: "Option 5", value: "option5" },
-  { label: "Option 6", value: "option6" },
-  { label: "Option 7", value: "option7" },
-];
+import { FC, memo, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 interface Props extends React.ComponentPropsWithoutRef<"div"> {
   className?: string;
 }
+const Filter: FC<Props> = ({ className }) => {
+  const dispatch = useAppDispatch();
+  const filters = useSelector(selectInstrumentFilters);
+  const types = filters?.types ?? [];
+  const typeValues = useSelector(selectInstrumentTypes);
+  const options = typeValues.map((type) => ({
+    label: type,
+    value: type,
+  }));
 
-export const SegmentFilter: FC<Props> = ({ className }) => {
-  const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    const urlQuery = new URLSearchParams(window.location.search);
+    const segment = urlQuery.get("segment");
+
+    if (segment) {
+      dispatch(
+        instrumentActions.setFilter({
+          key: "types",
+          value: segment.toLowerCase().split(",") as InstrumentType[],
+        })
+      );
+    }
+  }, [dispatch]);
 
   return (
     <Popover>
@@ -46,31 +63,34 @@ export const SegmentFilter: FC<Props> = ({ className }) => {
         >
           <PlusCircleIcon className="mr-2 h-4 w-4" />
           Segment
-          {selectedValues?.size > 0 && (
+          {types?.length > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
                 variant="secondary"
                 className="rounded-sm px-1 font-normal lg:hidden"
               >
-                {selectedValues.size}
+                {types?.length}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
-                {selectedValues.size > 2 ? (
+                {types?.length > 2 ? (
                   <Badge
                     variant="secondary"
-                    className="rounded-sm px-1 font-normal"
+                    className="rounded-sm px-1 font-normal capitalize"
                   >
-                    {selectedValues.size} selected
+                    {types?.length} selected
                   </Badge>
                 ) : (
                   options
-                    .filter((option) => selectedValues.has(option.value))
+                    .filter(
+                      (option) =>
+                        types.indexOf(option.value as InstrumentType) > -1
+                    )
                     .map((option) => (
                       <Badge
                         key={option.value}
                         variant="secondary"
-                        className="rounded-sm px-1 font-normal"
+                        className="rounded-sm px-1 font-normal capitalize"
                       >
                         {option.label}
                       </Badge>
@@ -88,20 +108,25 @@ export const SegmentFilter: FC<Props> = ({ className }) => {
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
-                const isSelected = selectedValues.has(option.value);
+                const isSelected =
+                  types.indexOf(option.value as InstrumentType) > -1;
                 return (
                   <CommandItem
                     key={option.value}
                     onSelect={() => {
                       if (isSelected) {
-                        setSelectedValues((prev) => {
-                          const next = new Set(prev);
-                          next.delete(option.value);
-                          return next;
-                        });
+                        dispatch(
+                          instrumentActions.setFilter({
+                            key: "types",
+                            value: types.filter((t) => t !== option.value),
+                          })
+                        );
                       } else {
-                        setSelectedValues((prev) =>
-                          new Set(prev).add(option.value)
+                        dispatch(
+                          instrumentActions.setFilter({
+                            key: "types",
+                            value: [...types, option.value],
+                          })
                         );
                       }
                     }}
@@ -117,18 +142,22 @@ export const SegmentFilter: FC<Props> = ({ className }) => {
                       <CheckIcon className={cn("h-4 w-4")} />
                     </div>
 
-                    <span>{option.label}</span>
+                    <span className="capitalize">{option.label}</span>
                   </CommandItem>
                 );
               })}
             </CommandGroup>
-            {selectedValues.size > 0 && (
+            {types.length > 0 && (
               <>
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
                     className="justify-center text-center"
-                    onSelect={() => setSelectedValues(new Set())}
+                    onSelect={() =>
+                      dispatch(
+                        instrumentActions.setFilter({ key: "types", value: [] })
+                      )
+                    }
                   >
                     Clear filters
                   </CommandItem>
@@ -141,3 +170,5 @@ export const SegmentFilter: FC<Props> = ({ className }) => {
     </Popover>
   );
 };
+
+export const SegmentFilter = memo(Filter);

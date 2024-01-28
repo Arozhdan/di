@@ -11,10 +11,7 @@ $api.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response.status === 401) {
-      alert("Unauthorized, the page will be reloaded")
-      window.location.reload()
-    }
+    console.log("Error from axios interceptor: ", error);
     return Promise.reject(error)
   },
 )

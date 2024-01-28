@@ -15,6 +15,7 @@ import { Query } from "@/pages/Query";
 import { CreateTemplate } from "@/pages/CreateTemplate";
 import { Chat } from "@/pages/Chat";
 import { SingleTemplate } from "@/pages/SingleTemplate";
+import { Signin } from "@/pages/Auth";
 
 export type AppRoutesProps = RouteProps & {
   authOnly?: boolean;
@@ -36,6 +37,7 @@ export enum AppRoutes {
   SETTINGS_BILLING = "billing_settings",
   SETTINGS_SUBSCRIPTIONS = "subscriptions_settings",
   CHAT = "chat",
+  SIGNIN = "signin",
 
   // last
   NOT_FOUND = "not_found",
@@ -56,6 +58,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.SETTINGS_BILLING]: "/settings/billing",
   [AppRoutes.SETTINGS_SUBSCRIPTIONS]: "/settings/billing/subscriptions",
   [AppRoutes.CHAT]: "/chat",
+  [AppRoutes.SIGNIN]: "/signin",
 
   // последний
   [AppRoutes.NOT_FOUND]: "*",
@@ -140,7 +143,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     authOnly: true,
     element: <Chat />,
   },
-
+  [AppRoutes.SIGNIN]: {
+    path: RoutePath.signin,
+    element: <Signin />,
+  },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,
     element: (

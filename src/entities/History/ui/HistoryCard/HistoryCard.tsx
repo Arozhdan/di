@@ -1,21 +1,41 @@
+import { format } from "date-fns";
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Card, CardContent, CardFooter, CardHeader } from "@components/card";
 import { FC, memo, useRef, useState } from "react";
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import styles from "./HistoryCard.module.css";
-import { CopyIcon, PinIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, PinIcon, PinOffIcon, Trash2Icon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { RoutePath } from "@/app/providers/Router";
+import { History, deleteHistory, pinHistory, unpinHistory } from "../..";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/components/ui/alert-dialog";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   expandable?: boolean;
+  history: History;
 }
 
-const HistoryCard: FC<Props> = ({ className, expandable = true, ...props }) => {
+const HistoryCard: FC<Props> = ({
+  className,
+  history,
+  expandable = true,
+  ...props
+}) => {
+  const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -32,10 +52,22 @@ const HistoryCard: FC<Props> = ({ className, expandable = true, ...props }) => {
     });
   };
 
-  const instrumentPath = RoutePath.instrument.replace(":id", "1");
+  const instrumentPath = RoutePath.instrument.replace(
+    ":id",
+    history.instrument.id.toString()
+  );
 
   const handleClick = () => {
-    navigate(RoutePath.query.replace(":id", "1"));
+    navigate(RoutePath.query.replace(":id", history.id.toString()));
+  };
+
+  const handlePin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (history.isPinned) {
+      dispatch(unpinHistory(history));
+    } else {
+      dispatch(pinHistory(history));
+    }
   };
 
   const classes = cn(styles.card, className, {
@@ -56,18 +88,52 @@ const HistoryCard: FC<Props> = ({ className, expandable = true, ...props }) => {
             <TooltipTrigger>
               <div className={styles.title}>
                 <Typography variant="sectionSubtitle" as="h3">
-                  <span ref={titleRef}>
-                    5 идей для онлайн-бизнеса в 2024 году
-                  </span>
+                  <span ref={titleRef}>{history.input}</span>
                 </Typography>
               </div>
             </TooltipTrigger>
             <div className={styles.actions}>
-              <button className={styles.delete} onClick={() => {}}>
-                <Trash2Icon size={16} />
-              </button>
-              <button className={styles.history} onClick={() => {}}>
-                <PinIcon size={16} />
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className={styles.delete}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Trash2Icon size={16} />
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      this record.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dispatch(deleteHistory(history.id));
+                      }}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <button className={styles.history} onClick={handlePin}>
+                {history.isPinned ? (
+                  <PinOffIcon size={16} />
+                ) : (
+                  <PinIcon size={16} />
+                )}
               </button>
               <button className={styles.copy} onClick={handleCopy}>
                 <CopyIcon size={16} />
@@ -79,41 +145,22 @@ const HistoryCard: FC<Props> = ({ className, expandable = true, ...props }) => {
             className={styles.link}
             onClick={(e) => e.stopPropagation()}
           >
-            5 идей для онлайн-бизнеса в 2024 году
+            {history.instrument.name}
           </Link>
         </CardHeader>
-        <CardContent
-          className={cn(styles.content, {
-            "line-clamp-3": !isExpanded,
-          })}
-        >
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                ref={contentRef}
-                className={cn({
-                  "cursor-text": isExpanded,
-                })}
-                onClick={(e) => isExpanded && e.stopPropagation()}
-              >
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Officia voluptatibus facilis culpa aperiam laboriosam ipsa
-                excepturi dicta nostrum totam ipsum! Iste praesentium tempore
-                excepturi dicta nostrum totam ipsum! Iste praesentium tempore
-                excepturi dicta nostrum totam ipsum! Iste praesentium tempore
-                sint dolorem mollitia soluta a at velit.s
-              </div>
-            </TooltipTrigger>
-            <TooltipContent
-              className="max-w-lg cursor-text"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia
-              voluptatibus facilis culpa aperiam laboriosam ipsa excepturi dicta
-              nostrum totam ipsum! Iste praesentium tempore sint dolorem
-              mollitia soluta a at velit.s
-            </TooltipContent>
-          </Tooltip>
+        <CardContent className={cn(styles.content)}>
+          <div
+            ref={contentRef}
+            className={cn({
+              "cursor-text": isExpanded,
+              "line-clamp-2": !isExpanded,
+              "line-clamp-[30]": isExpanded,
+            })}
+            onClick={(e) => isExpanded && e.stopPropagation()}
+            dangerouslySetInnerHTML={{
+              __html: history.output.replace(/\n/g, "<br />"),
+            }}
+          />
         </CardContent>
         {expandable && (
           <CardFooter className={styles.footer}>
@@ -128,15 +175,13 @@ const HistoryCard: FC<Props> = ({ className, expandable = true, ...props }) => {
               {isExpanded ? "Свернуть" : "Развернуть"}
             </Button>
             <span className="inline-block ml-auto text-xs text-gray-500">
-              21.09.2021
+              {format(new Date(history.createdAt), "dd.MM.yyyy, HH:mm")}
             </span>
           </CardFooter>
         )}
       </Card>
       <TooltipContent>
-        <div className="text-sm font-normal">
-          Переводчик из грубого в вежливый
-        </div>
+        <div className="text-sm font-normal max-w-md">{history.input}</div>
       </TooltipContent>
     </Tooltip>
   );

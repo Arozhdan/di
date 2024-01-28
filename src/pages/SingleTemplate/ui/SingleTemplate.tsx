@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { HistoryCard } from "@/entities/History";
+// import { HistoryCard } from "@/entities/History";
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
@@ -231,8 +231,8 @@ const SingleTemplate = () => {
                       <DrawerDescription asChild>
                         <ScrollArea className="h-[60vh] text-left">
                           <div className="space-y-4 pb-2">
-                            <HistoryCard expandable />
-                            <HistoryCard expandable />
+                            {/* <HistoryCard expandable />
+                            <HistoryCard expandable /> */}
                           </div>
                         </ScrollArea>
                       </DrawerDescription>
@@ -271,6 +271,7 @@ const SingleTemplate = () => {
                 </Link>
               </div>
               <div className="space-y-4 pr-6">
+                {/* <HistoryCard expandable />
                 <HistoryCard expandable />
                 <HistoryCard expandable />
                 <HistoryCard expandable />
@@ -287,8 +288,7 @@ const SingleTemplate = () => {
                 <HistoryCard expandable />
                 <HistoryCard expandable />
                 <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
+                <HistoryCard expandable /> */}
               </div>
             </ScrollArea>
           </div>

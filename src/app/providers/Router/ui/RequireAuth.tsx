@@ -1,16 +1,17 @@
 // import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import { RoutePath } from "../config/router.config";
+import { selectUser } from "@/entities/User";
+import { useSelector } from "react-redux";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
-  // const auth = useSelector(getUserAuthData)
-  const auth = { jwt: true };
+  const user = useSelector(selectUser);
 
   const location = useLocation();
 
-  if (!auth.jwt) {
+  if (!user?.email) {
     return (
-      <Navigate to={RoutePath.not_found} state={{ from: location }} replace />
+      <Navigate to={RoutePath.signin} state={{ from: location }} replace />
     );
   }
 

@@ -67,7 +67,7 @@
     box-sizing: border-box;
   }
   body {
-    @apply bg-background text-foreground lg:h-screen w-screen overflow-y-auto lg:overflow-y-hidden;
+    @apply bg-background text-foreground lg:h-screen w-screen overflow-x-hidden overflow-y-auto lg:overflow-y-hidden;
   }
   #root {
     @apply flex flex-col lg:h-screen min-h-screen;

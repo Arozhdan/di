@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { HistoryCard } from "@/entities/History";
+import { GenerateOverlay, HistoryCard } from "@/entities/History";
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
@@ -30,9 +30,9 @@ import {
   DrawerTrigger,
 } from "@/shared/components/ui/drawer";
 import { Navbar } from "@/widgets/Navbar";
-import { ArrowLeftIcon, BotIcon, PinIcon } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { ArrowLeftIcon, BotIcon, PinIcon, StarIcon } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useCallback, useRef, useState } from "react";
 import { RoutePath } from "@/app/providers/Router";
 import {
   Form,
@@ -43,31 +43,51 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/components/ui/form";
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
+import { useSelector } from "react-redux";
+import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
+import {
+  favoriteInstrument,
+  generateQuery,
+  isGenerating,
+  selectInstrumentById,
+  selectIsFavoritedInstrument,
+  selectIsInstrumentsListLoading,
+  unfavoriteInstrument,
+} from "@/entities/Instrument";
+import { PageLoader } from "@/widgets/Loader";
+import { selectHistoryByInstrument } from "@/entities/History/model/selectors/selectHistoryByInstrument/selectHistoryByInstrument";
 
 const formSchema = z.object({
   input: z
     .string()
     .min(10, "Минимум 10 символов")
     .max(400, "Максимум 400 символов"),
-  language: z.enum(["ru", "en"]),
-  tone: z.enum(["professional", "polite", "neutral", "rude"]),
+  language: z.enum(["russian", "english"]),
+  tov: z.enum(["professional", "polite", "neutral", "rude"]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const defaultValues: FormValues = {
   input: "",
-  language: "ru",
-  tone: "professional",
+  language: "russian",
+  tov: "professional",
 };
 
 const SingleInstrument = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [pinnedOnly, setPinnedOnly] = useState(false);
+  const isInstrumentLoading = useSelector(selectIsInstrumentsListLoading);
   const isWindows =
     navigator.platform.indexOf("Win") > -1 ||
     navigator.platform.indexOf("win") > -1;
 
   const drawerTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const params = useParams<{ id: string }>();
+  const instrumentId = params.id;
 
   const form = useForm<FormValues>({
     defaultValues,
@@ -75,8 +95,36 @@ const SingleInstrument = () => {
   });
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    if (!instrumentId) return;
+    dispatch(
+      generateQuery({
+        input: values.input,
+        instrumentId: instrumentId,
+        language: values.language,
+        tov: values.tov,
+      })
+    );
   };
+  const instrument = useSelector((state: StateSchema) =>
+    selectInstrumentById(state, instrumentId)
+  );
+  const isFavorited = useSelector((state: StateSchema) =>
+    selectIsFavoritedInstrument(state, instrumentId)
+  );
+  const history = useSelector((state: StateSchema) =>
+    selectHistoryByInstrument(state, instrumentId)
+  );
+  const generating = useSelector(isGenerating);
+
+  const historyToRender = useCallback(() => {
+    if (pinnedOnly) {
+      return history.filter((history) => history.isPinned);
+    }
+    return history;
+  }, [history, pinnedOnly])();
+
+  if (isInstrumentLoading) return <PageLoader />;
+  if (!instrument) return navigate(RoutePath.instruments);
 
   return (
     <>
@@ -98,46 +146,54 @@ const SingleInstrument = () => {
         </div>
       </Navbar>
       <div className="page">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-10 w-full flex-1 px-1 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-10 w-full flex-1 px-1 overflow-hidden ">
           <Form {...form}>
             <form
-              className="col-span-3 flex flex-col"
+              className="col-span-3 flex flex-col relative"
               onSubmit={form.handleSubmit(onSubmit)}
             >
+              {generating && <GenerateOverlay />}
               <div>
                 <Typography variant="sectionSubtitle">
-                  5 идей для онлайн-бизнеса в 2024 году
+                  {instrument.name}
                 </Typography>
                 <div className="mb-2 hidden md:block mt-1">
-                  <Toggle variant="dashed" size="xs" className="flex">
-                    <PinIcon size={14} className="mr-2" />
-                    Закрепить
+                  <Toggle
+                    variant="dashed"
+                    size="xs"
+                    className="flex"
+                    pressed={isFavorited}
+                    onPressedChange={() => {
+                      if (isFavorited) {
+                        dispatch(unfavoriteInstrument(instrument));
+                      } else {
+                        dispatch(favoriteInstrument(instrument));
+                      }
+                    }}
+                  >
+                    <StarIcon size={14} className="mr-2" />
+                    {isFavorited ? "В избранном" : "Добавить в избранное"}
                   </Toggle>
                 </div>
                 <Tooltip>
                   <TooltipTrigger className="text-left">
                     <Typography className="text-gray-500 leading-5 line-clamp-4 lg:line-clamp-2">
-                      5 идей для онлайн-бизнеса в 2024 году 5 идей для
-                      онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в
-                      2024 году 5 идей для онлайн-бизнеса в 2024 году 5 идей для
-                      онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5
-                      идей для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024
-                      году 5 идей для онлайн-бизнеса в 2024 году онлайн-бизнеса
-                      в 2024 году 5 идей для онлайн-бизнеса в 2024 году
+                      {instrument.description}
                     </Typography>
                   </TooltipTrigger>
                   <TooltipContent className="max-w-lg whitespace-normal">
-                    5 идей для онлайн-бизнеса в 2024 году 5 идей для
-                    онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024
-                    году 5 идей для онлайн-бизнеса в 2024 году 5 идей для
-                    онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5 идей
-                    для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5
-                    идей для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024
-                    году 5 идей для онлайн-бизнеса в 2024 году
+                    {instrument.description}
                   </TooltipContent>
                 </Tooltip>
-                <Link to="/" className="underline text-xs">
-                  Business
+                <Link
+                  to={
+                    RoutePath.instruments +
+                    "?segment=" +
+                    instrument.instrumentType
+                  }
+                  className="underline text-xs block capitalize"
+                >
+                  {instrument.instrumentType}
                 </Link>
               </div>
               <div className="mt-2 lg:mt-6 flex-grow pb-2 lg:pb-8">
@@ -152,7 +208,7 @@ const SingleInstrument = () => {
                           onChange={field.onChange}
                           value={field.value}
                           className="resize-none placeholder:text-xs h-36 lg:h-48"
-                          placeholder="Exapmle: &#10;5 идей для онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году онлайн-бизнеса в 2024 году 5 идей для онлайн-бизнеса в 2024 году"
+                          placeholder={instrument.example}
                         />
                       </FormControl>
                       <FormDescription>
@@ -165,7 +221,11 @@ const SingleInstrument = () => {
                 />
               </div>
               <div className="mt-auto mb-1 grid gap-2 lg:gap-0 lg:flex lg:space-x-4">
-                <Button className="row-start-3" type="submit">
+                <Button
+                  className="row-start-3"
+                  type="submit"
+                  disabled={generating}
+                >
                   <BotIcon size={14} className="mr-2" />
                   Сгенерировать
                   {isWindows ? (
@@ -178,16 +238,29 @@ const SingleInstrument = () => {
                     </kbd>
                   )}
                 </Button>
-                <Select defaultValue="ru">
+                <Select
+                  defaultValue={form.getValues().language}
+                  onValueChange={(value) => {
+                    form.setValue("language", value as "russian" | "english");
+                  }}
+                >
                   <SelectTrigger className="md:w-[140px]">
                     <SelectValue placeholder="Язык" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ru">Русский</SelectItem>
-                    <SelectItem value="en">Английский</SelectItem>
+                    <SelectItem value="russian">Русский</SelectItem>
+                    <SelectItem value="english">Английский</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select defaultValue="professional">
+                <Select
+                  defaultValue={form.getValues().tov}
+                  onValueChange={(value) => {
+                    form.setValue(
+                      "tov",
+                      value as "professional" | "polite" | "neutral" | "rude"
+                    );
+                  }}
+                >
                   <SelectTrigger className="md:w-[220px]">
                     <SelectValue placeholder="Тон речи" />
                   </SelectTrigger>
@@ -214,6 +287,8 @@ const SingleInstrument = () => {
                         </Typography>
                       </DrawerTitle>
                       <Toggle
+                        pressed={pinnedOnly}
+                        onPressedChange={setPinnedOnly}
                         variant="outline"
                         size="sm"
                         className="flex mt-2 mb-4"
@@ -224,8 +299,9 @@ const SingleInstrument = () => {
                       <DrawerDescription asChild>
                         <ScrollArea className="h-[60vh] text-left">
                           <div className="space-y-4 pb-2">
-                            <HistoryCard expandable />
-                            <HistoryCard expandable />
+                            {history.map((history) => (
+                              <HistoryCard key={history.id} history={history} />
+                            ))}
                           </div>
                         </ScrollArea>
                       </DrawerDescription>
@@ -249,7 +325,13 @@ const SingleInstrument = () => {
             <ScrollArea className="h-[calc(100vh-5rem)]">
               <Typography variant="sectionSubtitle">История</Typography>
               <div className="flex space-x-4 items-center mt-2 mb-4">
-                <Toggle variant="outline" size="sm" className="flex">
+                <Toggle
+                  variant="outline"
+                  size="sm"
+                  className="flex"
+                  pressed={pinnedOnly}
+                  onPressedChange={setPinnedOnly}
+                >
                   <PinIcon size={14} className="mr-2" />
                   Только закрепленные
                 </Toggle>
@@ -258,31 +340,20 @@ const SingleInstrument = () => {
                     variant: "link",
                     size: "sm",
                   })}
-                  to={RoutePath.history + "?instrument=1"}
+                  to={RoutePath.history + "?instrument=" + instrumentId}
                 >
                   Смотреть все
                 </Link>
               </div>
-              <div className="space-y-4 pr-6">
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-                <HistoryCard expandable />
-              </div>
+              {historyToRender.length > 0 ? (
+                <div className="space-y-4 pr-6">
+                  {historyToRender.map((history) => (
+                    <HistoryCard key={history.id} history={history} />
+                  ))}
+                </div>
+              ) : (
+                <Typography className="text-gray-500">История пуста</Typography>
+              )}
             </ScrollArea>
           </div>
         </div>

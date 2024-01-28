@@ -72,7 +72,7 @@ export const Layout: FC<Props> = ({ children }) => {
   }
 
   const [sidebarWidth, setSidebarWidth] = useState(defaultSidebarSize);
-  const [minSidebarWidth, setMinSidebarWidth] = useState(11);
+  const [minSidebarWidth, setMinSidebarWidth] = useState(12);
   const [maxSidebarWidth, setMaxSidebarWidth] = useState(15);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -86,7 +86,7 @@ export const Layout: FC<Props> = ({ children }) => {
       setMaxSidebarWidth(20);
     } else {
       setMinSidebarWidth(11);
-      setMaxSidebarWidth(14);
+      setMaxSidebarWidth(15);
     }
   }, [isDesktopSmall]);
 

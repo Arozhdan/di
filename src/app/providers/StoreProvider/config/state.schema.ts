@@ -8,6 +8,11 @@ import { type NavigateOptions, type To } from "react-router-dom"
 
 import type { AxiosInstance } from "axios"
 import { GlobalSearchSchema } from "@/features/GlobalSearch"
+import { UserSchema } from "@/entities/User"
+import { SigninLocalSchema } from "@/features/AuthLocal"
+import { InstrumentSchema } from "@/entities/Instrument"
+import { SiteSettingsSchema } from "@/entities/SiteSettings"
+import { HistorySchema } from "@/entities/History"
 
 export type CombinedState<S> = {
   [K in keyof S]: S[K]
@@ -15,15 +20,23 @@ export type CombinedState<S> = {
 
 
 export interface StateSchema {
-  globalSearch?: GlobalSearchSchema
+  globalSearch: GlobalSearchSchema
+  auth: UserSchema
+  signinLocal: SigninLocalSchema
+  user: UserSchema
+  instrument: InstrumentSchema
+  siteSettings: SiteSettingsSchema
+  history: HistorySchema
 }
 export type StateSchemaKey = keyof StateSchema
+export type MountedReducers = OptionalRecord<StateSchemaKey, boolean>;
 
 export interface ReducerManager {
   getReducerMap: () => ReducersMapObject<StateSchema>
   reduce: (state: StateSchema, action: AnyAction) => CombinedState<StateSchema>
   add: (key: StateSchemaKey, reducer: Reducer) => void
   remove: (key: StateSchemaKey) => void
+  getMountedReducers: () => MountedReducers
 }
 export interface ReduxStoreWithManager extends EnhancedStore<StateSchema> {
   reducerManager: ReducerManager

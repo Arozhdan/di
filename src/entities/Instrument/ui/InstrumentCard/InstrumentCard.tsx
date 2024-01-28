@@ -1,23 +1,48 @@
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Card, CardContent, CardHeader } from "@components/card";
 import { FC, memo } from "react";
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import styles from "./InstrumentCard.module.css";
-import { StarIcon } from "lucide-react";
+import { StarIcon, StarOffIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Link, useNavigate } from "react-router-dom";
 import { RoutePath } from "@/app/providers/Router";
+import {
+  Instrument,
+  favoriteInstrument,
+  instrumentActions,
+  selectIsFavoritedInstrument,
+  unfavoriteInstrument,
+} from "../..";
+import { useSelector } from "react-redux";
+import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
+  instrument: Instrument;
 }
 
-const InstrumentCard: FC<Props> = ({ className, ...props }) => {
+const InstrumentCard: FC<Props> = ({ instrument, className, ...props }) => {
   const classes = cn(styles.card, className);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isFavorited = useSelector((state: StateSchema) =>
+    selectIsFavoritedInstrument(state, instrument.id)
+  );
+
+  if (!instrument) return null;
 
   const handleClick = () => {
-    navigate("/instruments/1");
+    navigate(RoutePath.instrument.replace(":id", instrument.id));
+  };
+
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (isFavorited) {
+      dispatch(unfavoriteInstrument(instrument));
+    } else {
+      dispatch(favoriteInstrument(instrument));
+    }
   };
 
   return (
@@ -34,36 +59,36 @@ const InstrumentCard: FC<Props> = ({ className, ...props }) => {
             <TooltipTrigger>
               <div className={styles.title}>
                 <Typography variant="sectionSubtitle" as="h3">
-                  5 идей для онлайн-бизнеса в 2024 году
+                  {instrument.name}
                 </Typography>
               </div>
             </TooltipTrigger>
-            <button
-              className={styles.history}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <StarIcon size={16} />
+            <button className={styles.history} onClick={handleFavoriteClick}>
+              {isFavorited ? <StarOffIcon size={16} /> : <StarIcon size={16} />}
             </button>
           </div>
           <Link
-            to={RoutePath.instruments + "?segment=1"}
+            to={RoutePath.instruments + "?segment=" + instrument.instrumentType}
             className={styles.link}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch(
+                instrumentActions.setFilter({
+                  key: "types",
+                  value: [instrument.instrumentType],
+                })
+              );
+            }}
           >
-            Business
+            {instrument.instrumentType}
           </Link>
         </CardHeader>
-        <CardContent className={styles.content}>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia
-          voluptatibus facilis culpa aperiam laboriosam ipsa excepturi dicta
-          nostrum totam ipsum! Iste praesentium tempore sint dolorem mollitia
-          soluta a at velit.s
+        <CardContent>
+          <p className={styles.content}>{instrument.description}</p>
         </CardContent>
       </Card>
       <TooltipContent>
-        <div className="text-sm font-normal">
-          Переводчик из грубого в вежливый
-        </div>
+        <div className="text-sm font-normal">{instrument.name}</div>
       </TooltipContent>
     </Tooltip>
   );
