@@ -1,6 +1,7 @@
 import { ThunkConfig } from "@/app/providers/StoreProvider/config/state.schema";
 import { User, userActions } from "@/entities/User";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface SigninLocalProps {
   email: string;
@@ -39,6 +40,11 @@ export const signinLocal = createAsyncThunk<
     return user;
 
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log('error', error);
+
+      return rejectWithValue(error.response?.data?.errors[0]?.message || 'Error signing in. Please try again.');
+    }
     console.log('Error signing in: ', error);
 
     return rejectWithValue('Error signing in. Please try again.');

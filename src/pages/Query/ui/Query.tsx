@@ -206,7 +206,7 @@ const Query = () => {
                 <CopyIcon size={16} />
               </Button>
             </div>
-            <div className="mt-auto mb-1 grid gap-2 lg:gap-0 lg:flex">
+            <div className="mt-auto mb-1 grid gap-2 lg:gap-0 flex-shrink-0 lg:flex">
               <Button
                 className="row-start-3"
                 type="submit"

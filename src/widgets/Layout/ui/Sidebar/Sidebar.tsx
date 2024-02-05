@@ -1,4 +1,4 @@
-import { cn, useAppDispatch } from "@/shared/lib/utils";
+import { cn, useAppDispatch, useMediaQuery } from "@/shared/lib/utils";
 import { FC, memo } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, NavLink } from "react-router-dom";
@@ -48,12 +48,17 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
   const { setTheme } = useTheme();
   const dispatch = useAppDispatch();
   const user = useSelector(selectUser) as User;
-  const username =
+  let username =
     user.firstName && user.lastName
       ? user.firstName
         ? user.firstName
         : user.email
       : user.email;
+
+  const isSmallDesctop = useMediaQuery("(max-width: 1440px)");
+  if (isSmallDesctop) {
+    username = username.slice(0, 10) + "...";
+  }
   const classes = cn(styles.sidebar, className, {
     [styles.collapsed]: isCollapsed,
   });

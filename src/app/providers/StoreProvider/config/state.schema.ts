@@ -13,6 +13,7 @@ import { SigninLocalSchema } from "@/features/AuthLocal"
 import { InstrumentSchema } from "@/entities/Instrument"
 import { SiteSettingsSchema } from "@/entities/SiteSettings"
 import { HistorySchema } from "@/entities/History"
+import { ChatSchema } from "@/pages/Chat"
 
 export type CombinedState<S> = {
   [K in keyof S]: S[K]
@@ -27,6 +28,7 @@ export interface StateSchema {
   instrument: InstrumentSchema
   siteSettings: SiteSettingsSchema
   history: HistorySchema
+  chat: ChatSchema
 }
 export type StateSchemaKey = keyof StateSchema
 export type MountedReducers = OptionalRecord<StateSchemaKey, boolean>;

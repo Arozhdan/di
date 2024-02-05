@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { LOCAL_STORAGE } from "@/shared/lib/consts";
 import { EyeIcon } from "lucide-react";
-import { signinLocal } from "@/features/AuthLocal";
+import { selectLocalSigninError, signinLocal } from "@/features/AuthLocal";
 import { useSelector } from "react-redux";
 import { selectIsLocalSigninLoading } from "@/features/AuthLocal";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const Signin = () => {
   const dispatch = useAppDispatch();
   const authenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
-
+  const error = useSelector(selectLocalSigninError);
   useEffect(() => {
     console.log(authenticated);
 
@@ -43,7 +43,6 @@ const Signin = () => {
     }
   }, [authenticated, navigate]);
 
-  const [email, setEmail] = useState("");
   const [passwordType, setPasswordType] = useState<"password" | "text">(
     "password"
   );
@@ -60,16 +59,9 @@ const Signin = () => {
   useEffect(() => {
     const email = localStorage.getItem(LOCAL_STORAGE.SIGNIN_EMAIL);
     if (email) {
-      setEmail(email);
       form.setValue("email", email);
     }
   }, [form]);
-
-  const clearEmail = () => {
-    setEmail("");
-    form.setValue("password", "");
-    localStorage.removeItem(LOCAL_STORAGE.SIGNIN_EMAIL);
-  };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     localStorage.setItem(LOCAL_STORAGE.SIGNIN_EMAIL, data.email);
@@ -104,114 +96,87 @@ const Signin = () => {
           <p className="max-w-md text-center mt-3 text-gray-500">
             Sign in to your account to continue. If you don't have an account,
             you can{" "}
-            <a href="#" className="text-blue-500 hover:underline">
-              create one.
-            </a>
+            <Link
+              to="/signup"
+              className={cn(
+                buttonVariants({
+                  variant: "link",
+                }),
+                "underline px-1"
+              )}
+            >
+              sign up
+            </Link>
           </p>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  form.handleSubmit(onSubmit)();
+                }
+              }}
               className="spy-4 my-6 max-w-md"
             >
-              <div
-                className={cn({
-                  hidden: !!email,
-                })}
-              >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Email address</FormLabel>
-                      <FormControl>
+              {error && (
+                <div className="text-primary text-sm mb-2">{error}</div>
+              )}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="sr-only">Email address</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="example@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="sr-only">Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
                         <Input
-                          type="email"
-                          placeholder="example@example.com"
+                          placeholder="Password"
+                          type={passwordType}
                           {...field}
                         />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="button"
-                  onClick={() => setEmail(form.getValues("email"))}
-                  className="mt-2 w-full"
-                  disabled={
-                    !form.formState.dirtyFields.email &&
-                    !form.getValues("email")
-                  }
-                >
-                  Sign In with Email
-                </Button>
-                <Link
-                  to={"/"}
-                  className={cn(
-                    buttonVariants({
-                      variant: "ghost",
-                    }),
-                    "mt-1 w-full"
-                  )}
-                >
-                  Sign up
-                </Link>
-              </div>
-              <div
-                className={cn({
-                  hidden: !email,
-                })}
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          type="button"
+                          className="rounded-l-none absolute top-0 right-0 bottom-0"
+                          onTouchStart={() => setPasswordType("text")}
+                          onTouchEnd={() => setPasswordType("password")}
+                          onMouseDown={() => setPasswordType("text")}
+                          onMouseUp={() => setPasswordType("password")}
+                        >
+                          <EyeIcon size={12} />
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full mt-2"
+                loading={isLocalLoading}
               >
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Password</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="Password"
-                            type={passwordType}
-                            {...field}
-                          />
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            type="button"
-                            className="rounded-l-none absolute top-0 right-0 bottom-0"
-                            onTouchStart={() => setPasswordType("text")}
-                            onTouchEnd={() => setPasswordType("password")}
-                            onMouseDown={() => setPasswordType("text")}
-                            onMouseUp={() => setPasswordType("password")}
-                          >
-                            <EyeIcon size={12} />
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="">
-                  <Button
-                    type="submit"
-                    className="mt-2 w-full"
-                    loading={isLocalLoading}
-                    disabled={isLocalLoading}
-                  >
-                    Sign In {isLocalLoading && "..."}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="w-full mt-1"
-                    onClick={clearEmail}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </div>
+                Sign in with email
+              </Button>
             </form>
             <div className="relative flex justify-center w-full max-w-md mb-6">
               <div className="text-gray-500 relative z-10 bg-background px-4 uppercase text-xs">

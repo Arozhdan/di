@@ -11,6 +11,7 @@ import { globalSearchReducer } from "@/features/GlobalSearch"
 import { instrumentReducer } from "@/entities/Instrument"
 import { siteSettingsReducer } from "@/entities/SiteSettings"
 import { historyReducer } from "@/entities/History"
+import { chatReducer } from "@/pages/Chat"
 
 
 
@@ -29,6 +30,7 @@ export function createReduxStore(
     instrument: instrumentReducer,
     siteSettings: siteSettingsReducer,
     history: historyReducer,
+    chat: chatReducer
   }
 
   const reducerManager = createReducerManager(rootReducers)
