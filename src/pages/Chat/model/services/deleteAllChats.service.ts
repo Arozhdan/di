@@ -8,7 +8,7 @@ export const deleteAllChats = createAsyncThunk<
   undefined,
   undefined,
   ThunkConfig<string>
->('chat/deleteAll', async (id, thunkApi) => {
+>('chat/deleteAll', async (_, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
     const response = await extra.api.delete<ChatItem>('/chat/deleteAll');

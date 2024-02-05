@@ -12,7 +12,6 @@ export { deleteAllChats } from './model/services/deleteAllChats.service'
 export { sendMessage } from './model/services/sendMessage.service'
 
 export { selectChatIsCreateLoading } from './model/selectors/selectChatIsCreateLoading'
-export { selectChatIsGenerateLoading } from './model/selectors/selectChatIsGenerateLoading'
 export { selectChats } from './model/selectors/selectChats'
 export { selectChatIsListLoading } from './model/selectors/selectChatIsListLoading'
 export { selectActiveChat } from './model/selectors/selectActiveChat'
