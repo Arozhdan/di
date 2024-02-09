@@ -187,7 +187,7 @@ const Chat = () => {
                 />
                 <Button
                   size={"icon"}
-                  className="absolute right-4 opacity-20 hover:opacity-100 focus:opacity-100"
+                  className="absolute right-4 hover:shadow-lg"
                 >
                   <SendIcon size={20} />
                 </Button>

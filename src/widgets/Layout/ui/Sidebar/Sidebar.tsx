@@ -1,4 +1,4 @@
-import { cn, useAppDispatch, useMediaQuery } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { FC, memo } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, NavLink } from "react-router-dom";
@@ -34,6 +34,7 @@ import { RoutePath } from "@/app/providers/Router";
 import { useSelector } from "react-redux";
 import { User, selectUser } from "@/entities/User";
 import { signout } from "@/features/AuthLocal";
+import { useTranslation } from "react-i18next";
 
 export interface Props extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -41,36 +42,34 @@ export interface Props extends React.HTMLAttributes<HTMLDivElement> {
     title: string;
     icon: LucideIcon;
     url: string;
+    disabled?: boolean;
   }[];
 }
 
 const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
   const { setTheme } = useTheme();
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const user = useSelector(selectUser) as User;
-  let username =
+  const username =
     user.firstName && user.lastName
-      ? user.firstName
+      ? user.firstName + " " + user.lastName
         ? user.firstName
         : user.email
       : user.email;
 
-  const isSmallDesctop = useMediaQuery("(max-width: 1440px)");
-  if (isSmallDesctop) {
-    username = username.slice(0, 10) + "...";
-  }
   const classes = cn(styles.sidebar, className, {
     [styles.collapsed]: isCollapsed,
   });
   return (
     <div className={classes} {...props}>
-      <div className={styles.logo}>
+      <Link to={"/"} className={styles.logo}>
         {isCollapsed ? (
           <img src="/logo-small.svg" alt="" />
         ) : (
           <img src="/logo.svg" alt="" />
         )}
-      </div>
+      </Link>
       <div className={styles.content}>
         <div
           data-collapsed={isCollapsed}
@@ -81,27 +80,39 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
               isCollapsed ? (
                 <Tooltip key={index} delayDuration={0}>
                   <TooltipTrigger>
-                    <NavLink
-                      key={index}
-                      to={link.url}
-                      className={({ isActive }) =>
-                        isActive
-                          ? cn(
-                              buttonVariants({ size: "sm" }),
-                              "justify-start dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
-                            )
-                          : cn(
-                              buttonVariants({
-                                variant: "ghost",
-                                size: "sm",
-                              }),
-                              "justify-start"
-                            )
-                      }
-                    >
-                      <link.icon className="h-4 w-4" />
-                      <span className="sr-only">{link.title}</span>
-                    </NavLink>
+                    {link.disabled ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="justify-start"
+                        disabled
+                      >
+                        <link.icon className="h-4 w-4" />
+                        <span className="sr-only">{link.title}</span>
+                      </Button>
+                    ) : (
+                      <NavLink
+                        key={index}
+                        to={link.url}
+                        className={({ isActive }) =>
+                          isActive
+                            ? cn(
+                                buttonVariants({ size: "sm" }),
+                                "justify-start dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                              )
+                            : cn(
+                                buttonVariants({
+                                  variant: "ghost",
+                                  size: "sm",
+                                }),
+                                "justify-start"
+                              )
+                        }
+                      >
+                        <link.icon className="h-4 w-4" />
+                        <span className="sr-only">{link.title}</span>
+                      </NavLink>
+                    )}
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
@@ -110,6 +121,16 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                     {link.title}
                   </TooltipContent>
                 </Tooltip>
+              ) : link.disabled ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="justify-start"
+                  disabled
+                >
+                  <link.icon className="mr-2 h-4 w-4" />
+                  {link.title}
+                </Button>
               ) : (
                 <NavLink
                   key={index}
@@ -151,11 +172,15 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                         >
                           <Globe2Icon className="w-4 h-4" />
                           {isCollapsed ? null : (
-                            <span className="ml-2"> Language </span>
+                            <span className="ml-2">
+                              {t("general.language")}
+                            </span>
                           )}
                         </span>
                       </TooltipTrigger>
-                      <TooltipContent side="right">Language</TooltipContent>
+                      <TooltipContent side="right">
+                        {t("general.language")}
+                      </TooltipContent>
                     </>
                   ) : (
                     <span
@@ -166,21 +191,21 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                     >
                       <Globe2Icon className="w-4 h-4" />
                       {isCollapsed ? null : (
-                        <span className="ml-2"> Language </span>
+                        <span className="ml-2"> {t("general.language")} </span>
                       )}
                     </span>
                   )}
                 </Tooltip>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" className="ml-2">
-                <DropdownMenuLabel>Язык интерфейса</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("general.language")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  Русский
+                <DropdownMenuItem onClick={() => i18n.changeLanguage("ru")}>
+                  {t("general.ru")}
                   <DropdownMenuShortcut>RU</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  English
+                <DropdownMenuItem onClick={() => i18n.changeLanguage("en")}>
+                  {t("general.en")}
                   <DropdownMenuShortcut>EN</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -199,11 +224,13 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                         >
                           <SunMoonIcon className="w-4 h-4" />
                           {isCollapsed ? null : (
-                            <span className="ml-2"> Theme </span>
+                            <span className="ml-2"> {t("general.theme")} </span>
                           )}
                         </span>
                       </TooltipTrigger>
-                      <TooltipContent side="right">Theme</TooltipContent>
+                      <TooltipContent side="right">
+                        {t("general.theme")}
+                      </TooltipContent>
                     </>
                   ) : (
                     <span
@@ -214,23 +241,23 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                     >
                       <SunMoonIcon className="w-4 h-4" />
                       {isCollapsed ? null : (
-                        <span className="ml-2"> Theme </span>
+                        <span className="ml-2">{t("general.theme")}</span>
                       )}
                     </span>
                   )}
                 </Tooltip>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" className="ml-2">
-                <DropdownMenuLabel>Интерфейс</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("general.theme")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setTheme("light")}>
-                  Светлый
+                  {t("general.light")}
                   <DropdownMenuShortcut>
                     <LightbulbIcon size={12} />
                   </DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  Темный
+                  {t("general.dark")}
                   <DropdownMenuShortcut>
                     <MoonIcon size={12} />
                   </DropdownMenuShortcut>
@@ -241,7 +268,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
           <div className="mt-auto px-4 group-[[data-collapsed=true]]:px-2 pb-4">
             <HoverCard openDelay={0}>
               <HoverCardTrigger>
-                <div className="flex group-[[data-collapsed=true]]:justify-center space-x-1 items-center">
+                <div className="flex group-[[data-collapsed=true]]:justify-center space-x-1 items-center overflow-hidden">
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png1" />
                     <AvatarFallback>
@@ -249,7 +276,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                     </AvatarFallback>
                   </Avatar>
                   {isCollapsed ? null : (
-                    <span className="font-semibold text-sm whitespace-nowrap">
+                    <span className="font-semibold block min-w-0 text-sm whitespace-nowrap text-ellipsis overflow-hidden">
                       {username}
                     </span>
                   )}
@@ -257,13 +284,13 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
               </HoverCardTrigger>
               <HoverCardContent>
                 <div className="space-y-1 mb-3">
-                  <b className="text-sm">Subscription:</b> <br />
+                  <b className="text-sm">{t("general.subscription")}:</b> <br />
                   <Link className="underline" to={RoutePath.billing_settings}>
                     Basic Subscription
                   </Link>
                 </div>
                 <div className="space-y-1">
-                  <b className="text-sm">Usage:</b>
+                  <b className="text-sm">{t("general.my_usage")}:</b>
                   <br />
                   <small className="text-xs">(33 / 100)</small>
                   <Progress value={33} className="h-2" />
@@ -273,7 +300,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                     onClick={() => dispatch(signout())}
                   >
                     <LogOutIcon size={12} className="mr-1" />
-                    Sign out
+                    {t("general.sign_out")}
                   </Button>
                 </div>
               </HoverCardContent>

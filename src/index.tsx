@@ -6,7 +6,7 @@ import { StoreProvider } from "./app/providers/StoreProvider/index.ts";
 import { TooltipProvider } from "@components/tooltip.tsx";
 import { Toaster } from "@components/sonner";
 import { ThemeProvider } from "./app/providers/ThemeProvider/index.ts";
-
+import "./app/i18n";
 const container = document.getElementById("root");
 
 if (!container) {

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { slateToHtml } from "@slate-serializers/html";
 import { Navbar } from "@/widgets/Navbar";
 import { Typography } from "@/shared/components/Typography/Typography";
@@ -42,6 +43,7 @@ import { selectSiteSettings } from "@/entities/SiteSettings";
 import { format } from "date-fns";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const isInstrumentsListLoading = useSelector(selectIsInstrumentsListLoading);
   const user = useSelector(selectUser);
   const favoriteInstruments = useSelector(selectFavoriteInstruments);
@@ -87,14 +89,14 @@ const Dashboard = () => {
       <Navbar />
       <div className={cn("page")}>
         <Typography className="mb-6" variant="pageTitle">
-          Dashboard
+          {t("general.dashboard")}
         </Typography>
         {mostUsedInstrument && (
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-6 w-full">
             <Card>
               <CardHeader className="flex flex-row justify-between items-center pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Most used instrument
+                  {t("dashboard.most_used_instrument")}
                 </CardTitle>
                 <FlameIcon size={16} className="ml-auto text-primary/70" />
               </CardHeader>
@@ -120,14 +122,16 @@ const Dashboard = () => {
                   </TooltipContent>
                 </Tooltip>
                 <p className="text-xs text-muted-foreground">
-                  Total of {mostUsedInstrument.timesUsed} queries
+                  {t("dashboard.total_of_queries", {
+                    total: mostUsedInstrument.timesUsed,
+                  })}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row justify-between items-center pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total number of queries
+                  {t("dashboard.total_queries")}
                 </CardTitle>
                 <BotIcon size={16} className="ml-auto text-primary/70" />
               </CardHeader>
@@ -143,14 +147,15 @@ const Dashboard = () => {
                   </TooltipContent>
                 </Tooltip>
                 <p className="text-xs text-muted-foreground">
-                  Since {format(user?.createdAt || new Date(), "MMMM yyyy")}
+                  {t("dashboard.since")}{" "}
+                  {format(user?.createdAt || new Date(), "MMMM yyyy")}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row justify-between items-center pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Time saved with AI
+                  {t("dashboard.time_saved")}
                 </CardTitle>
                 <HourglassIcon size={16} className="ml-auto text-primary/70" />
               </CardHeader>
@@ -159,25 +164,31 @@ const Dashboard = () => {
                   <TooltipTrigger>
                     <Link to="/" className="line-clamp-1 text-left">
                       <Typography variant="sectionTitle" as="span">
-                        Over {timeSaved?.value} hours
+                        {t("dashboard.over_amt_hours", {
+                          hours: timeSaved?.value,
+                        })}
                       </Typography>
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className="text-sm font-normal">
-                      Over {timeSaved?.value} hours
+                      {t("dashboard.over_amt_hours", {
+                        hours: timeSaved?.value,
+                      })}
                     </div>
                   </TooltipContent>
                 </Tooltip>
                 <p className="text-xs text-muted-foreground">
-                  On average {timeSaved?.average} minutes per content generation
+                  {t("dashboard.avg_time", {
+                    value: timeSaved?.average,
+                  })}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row justify-between items-center pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Estimated cost savings
+                  {t("dashboard.est_savings")}
                 </CardTitle>
                 <FlameIcon size={16} className="ml-auto text-primary/70" />
               </CardHeader>
@@ -197,7 +208,7 @@ const Dashboard = () => {
                   </TooltipContent>
                 </Tooltip>
                 <p className="text-xs text-muted-foreground">
-                  Based on average copywriter costs
+                  {t("dashboard.based_on_avg_costs")}
                 </p>
               </CardContent>
             </Card>
@@ -209,21 +220,25 @@ const Dashboard = () => {
             isInstrumentsListLoading) && (
             <Card className="lg:col-span-7 overflow-hidden">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Overview</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  {t("dashboard.overview")}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <Typography variant="sectionTitle" as="span">
-                  Instruments
+                  {t("general.instruments")}
                 </Typography>
                 <Tabs defaultValue="favorite">
                   <TabsList>
                     <TabsTrigger value="favorite">
                       <Typography variant="small">
-                        Favorite instruments
+                        {t("dashboard.fav_instruments")}
                       </Typography>
                     </TabsTrigger>
                     <TabsTrigger value="recent">
-                      <Typography variant="small">Recently used</Typography>
+                      <Typography variant="small">
+                        {t("dashboard.recently_used")}
+                      </Typography>
                     </TabsTrigger>
                   </TabsList>
                   <TabsContent value="favorite">
@@ -267,7 +282,7 @@ const Dashboard = () => {
                                   variant="sectionSubtitle"
                                   className="text-center"
                                 >
-                                  No favorite instruments yet
+                                  {t("dashboard.no_fav_yet")}
                                 </Typography>
                               </div>
                             </CarouselItem>
@@ -349,7 +364,7 @@ const Dashboard = () => {
         {history.length > 0 && (
           <div className="mt-6 w-full overflow-hidden">
             <Typography variant="sectionTitle" className="pl-1">
-              History
+              {t("general.history")}
             </Typography>
             <Carousel
               opts={{
@@ -375,7 +390,7 @@ const Dashboard = () => {
                       variant="sectionSubtitle"
                       className="text-center"
                     >
-                      View all
+                      {t("general.view_all")}
                     </Typography>
                   </Link>
                 </CarouselItem>

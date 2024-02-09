@@ -36,8 +36,6 @@ const Signin = () => {
   const navigate = useNavigate();
   const error = useSelector(selectLocalSigninError);
   useEffect(() => {
-    console.log(authenticated);
-
     if (authenticated) {
       navigate("/");
     }

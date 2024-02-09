@@ -19,6 +19,7 @@ export interface User {
   address: string
   firstName: string
   lastName: string
+  username: string
   phone: string
   loginAttempts: number
   logs?: Logs[]

@@ -29,12 +29,14 @@ import { withSettingsLayout } from "@/widgets/SettingsLayout";
 import { cn } from "@/shared/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { useTheme } from "@/app/providers/ThemeProvider";
+import { useTranslation } from "react-i18next";
 
 export const Appearance = () => {
+  const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const defaultValues: AppearanceFormValues = {
     theme,
-    language: "en",
+    language: i18n.language as "en" | "ru",
   };
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -42,7 +44,8 @@ export const Appearance = () => {
   });
 
   function onSubmit(data: AppearanceFormValues) {
-    const { theme } = data;
+    const { theme, language } = data;
+    i18n.changeLanguage(language);
     setTheme(theme);
     form.reset(data);
   }
@@ -51,9 +54,11 @@ export const Appearance = () => {
 
   return (
     <div className="container px-0">
-      <Typography variant="sectionSubtitle">Appearance</Typography>
+      <Typography variant="sectionSubtitle">
+        {t("general.appearance")}
+      </Typography>
       <Typography className="text-gray-500 border-b pb-4">
-        Manage application appearance settings.
+        {t("settings.appearance_subtitle")}
       </Typography>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-6">
@@ -62,7 +67,7 @@ export const Appearance = () => {
             name="language"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Language</FormLabel>
+                <FormLabel>{t("general.language")}</FormLabel>
                 <div className="relative w-max">
                   <FormControl>
                     <select
@@ -72,15 +77,12 @@ export const Appearance = () => {
                       )}
                       {...field}
                     >
-                      <option value="en">English</option>
-                      <option value="ru">Russian</option>
+                      <option value="en">{t("general.en")}</option>
+                      <option value="ru">{t("general.ru")}</option>
                     </select>
                   </FormControl>
                   <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
                 </div>
-                <FormDescription>
-                  Set the font you want to use in the dashboard.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -90,10 +92,8 @@ export const Appearance = () => {
             name="theme"
             render={({ field }) => (
               <FormItem className="space-y-1">
-                <FormLabel>Theme</FormLabel>
-                <FormDescription>
-                  Select the theme for the dashboard.
-                </FormDescription>
+                <FormLabel>{t("general.theme")}</FormLabel>
+                <FormDescription>{t("settings.theme_desc")}</FormDescription>
                 <FormMessage />
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -122,7 +122,7 @@ export const Appearance = () => {
                         </div>
                       </div>
                       <span className="block w-full p-2 text-center font-normal">
-                        Light
+                        {t("general.light")}
                       </span>
                     </FormLabel>
                   </FormItem>
@@ -148,7 +148,7 @@ export const Appearance = () => {
                         </div>
                       </div>
                       <span className="block w-full p-2 text-center font-normal">
-                        Dark
+                        {t("general.dark")}
                       </span>
                     </FormLabel>
                   </FormItem>
@@ -158,7 +158,7 @@ export const Appearance = () => {
           />
 
           <Button disabled={!form.formState.isDirty} type="submit">
-            Update preferences
+            {t("settings.upd_pref")}
           </Button>
         </form>
       </Form>

@@ -10,6 +10,7 @@ import {
   instrumentActions,
   selectInstrumentFilters,
 } from "@/entities/Instrument";
+import { useTranslation } from "react-i18next";
 
 interface Props extends React.ComponentPropsWithoutRef<"div"> {
   className?: string;
@@ -17,6 +18,7 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
 
 export const InstrumentsFilters: FC<Props> = ({ className, ...props }) => {
   const filters = useSelector(selectInstrumentFilters);
+  const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
   const isDirty =
@@ -44,7 +46,7 @@ export const InstrumentsFilters: FC<Props> = ({ className, ...props }) => {
   return (
     <div className={classes} {...props}>
       <Input
-        placeholder="Filter tasks..."
+        placeholder={t("general.search")}
         value={filters?.name ?? ""}
         onChange={(e) => {
           dispatch(instrumentActions.setFilters({ name: e.target.value }));
@@ -66,8 +68,7 @@ export const InstrumentsFilters: FC<Props> = ({ className, ...props }) => {
         className="h-8 md:ml-3"
       >
         <StarIcon className="h-4 w-4 mr-2" />
-        <span className="hidden md:inline">Only&nbsp;</span>
-        <span className="md:lowercase">Favorites</span>
+        {t("instrument.only_fav")}
       </Toggle>
       <SegmentFilter className="ml-3" />
       {isDirty && (
@@ -78,8 +79,7 @@ export const InstrumentsFilters: FC<Props> = ({ className, ...props }) => {
           onClick={clearFilters}
         >
           <Trash2Icon className="mr-2 h-4 w-4  group-hover:scale-95" />
-          Clear
-          <span className="hidden md:inline"> Filters</span>
+          {t("general.clear_filters")}
         </Button>
       )}
     </div>

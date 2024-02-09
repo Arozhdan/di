@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/components/ui/alert-dialog";
+import { useTranslation } from "react-i18next";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -40,6 +41,7 @@ const HistoryCard: FC<Props> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -172,7 +174,7 @@ const HistoryCard: FC<Props> = ({
                 setIsExpanded((prev) => !prev);
               }}
             >
-              {isExpanded ? "Свернуть" : "Развернуть"}
+              {isExpanded ? t("general.collapse") : t("general.expand")}
             </Button>
             <span className="inline-block ml-auto text-xs text-gray-500">
               {format(new Date(history.createdAt), "dd.MM.yyyy, HH:mm")}

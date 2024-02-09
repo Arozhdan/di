@@ -25,6 +25,7 @@ import { RoutePath } from "@/app/providers/Router";
 import { Link } from "react-router-dom";
 import { Progress } from "@/shared/components/ui/progress";
 import { GlobalSearch } from "@/features/GlobalSearch";
+import { useTranslation } from "react-i18next";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -64,17 +65,18 @@ const links = [
 ];
 
 const MobileNavigation = () => {
+  const { t } = useTranslation();
   return (
     <Sheet>
       <SheetTrigger>
         <Button size="sm">
-          Menu
+          {t("general.menu")}
           <MenuIcon className="ml-2 h-4 w-4" />
         </Button>
       </SheetTrigger>
       <SheetContent className="h-screen flex flex-col">
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
+          <SheetTitle>{t("general.menu")}</SheetTitle>
         </SheetHeader>
         <SheetDescription asChild>
           <div className="flex-1 flex flex-col">
@@ -102,7 +104,7 @@ const MobileNavigation = () => {
                   </Link>
                 </div>
                 <div className="space-y-1">
-                  <b className="text-sm">Usage:</b>
+                  <b className="text-sm">{t("general.my_usage")}</b>
                   <br />
                   <small className="text-xs">(33 / 100)</small>
                   <Progress value={33} className="h-2" />
@@ -117,6 +119,7 @@ const MobileNavigation = () => {
 };
 
 const Navbar: FC<Props> = ({ children, className, ...props }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const classes = cn(styles.navbar, className);
   const isWindows = navigator.platform?.includes("Win");
@@ -149,7 +152,7 @@ const Navbar: FC<Props> = ({ children, className, ...props }) => {
             className={styles.searchButton}
             onClick={() => setOpen(true)}
           >
-            Search{" "}
+            {t("general.search")}
             <kbd className="text-xs hidden md:inline">
               ({isWindows ? "Ctrl + K" : "⌘ + K"})
             </kbd>

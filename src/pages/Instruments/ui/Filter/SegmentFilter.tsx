@@ -24,12 +24,14 @@ import {
 } from "@shared/components/ui/command";
 import { CheckIcon, PlusCircleIcon } from "lucide-react";
 import { FC, memo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 interface Props extends React.ComponentPropsWithoutRef<"div"> {
   className?: string;
 }
 const Filter: FC<Props> = ({ className }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const filters = useSelector(selectInstrumentFilters);
   const types = filters?.types ?? [];
@@ -62,7 +64,7 @@ const Filter: FC<Props> = ({ className }) => {
           className={cn("h-8 border-dashed", className)}
         >
           <PlusCircleIcon className="mr-2 h-4 w-4" />
-          Segment
+          {t("instrument.category")}
           {types?.length > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
@@ -103,7 +105,7 @@ const Filter: FC<Props> = ({ className }) => {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
         <Command>
-          <CommandInput placeholder={"Type"} />
+          <CommandInput placeholder={t("general.search")} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
@@ -159,7 +161,7 @@ const Filter: FC<Props> = ({ className }) => {
                       )
                     }
                   >
-                    Clear filters
+                    {t("general.clear_filters")}
                   </CommandItem>
                 </CommandGroup>
               </>

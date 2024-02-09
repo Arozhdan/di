@@ -12,7 +12,13 @@ export const fetchSiteSettings = createAsyncThunk<
 >('site-settings/fetch', async (_, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
-    const response = await extra.api.get<SiteSettings>("/globals/settings");
+    const locale = extra.i18n.language;
+    const response = await extra.api.get<SiteSettings>("/globals/settings", {
+      params: {
+        locale,
+      },
+    });
+
 
     if (!response.data || !response.data.email) {
       throw new Error()

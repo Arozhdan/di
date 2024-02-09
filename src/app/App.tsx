@@ -11,12 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { fetchInstruments } from "@/entities/Instrument";
 import { fetchSiteSettings } from "@/entities/SiteSettings";
 import { fetchHistory } from "@/entities/History";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const dispatch = useAppDispatch();
   const inited = useSelector(selectAuthInited);
   const isAuthenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(initAuth());
@@ -31,7 +33,7 @@ function App() {
       dispatch(fetchSiteSettings());
       dispatch(fetchHistory());
     }
-  }, [isAuthenticated, inited, dispatch]);
+  }, [isAuthenticated, inited, dispatch, i18n.language]);
 
   return <Suspense fallback="">{inited && <AppRouter />}</Suspense>;
 }

@@ -10,13 +10,17 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { withSettingsLayout } from "@/widgets/SettingsLayout";
 import { StarIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Subscriptions = () => {
+  const { t } = useTranslation();
   return (
     <div className="container px-0">
-      <Typography variant="sectionSubtitle">Subscriptions</Typography>
+      <Typography variant="sectionSubtitle">
+        {t("general.subscriptions")}
+      </Typography>
       <Typography className="text-gray-500 border-b pb-4">
-        Select a plan that works best for you.
+        {t("settings.subs_desc")}
       </Typography>
       <div className="mt-6 space-y-4 xl:space-y-0 xl:grid grid-cols-3 gap-4">
         {[1, 2, 3].map((item) => (
@@ -32,7 +36,9 @@ const Subscriptions = () => {
                 <Typography variant="sectionSubtitle" as="span">
                   Basic plan{" "}
                   {item === 2 && (
-                    <span className="text-primary text-xs">- Recommended</span>
+                    <span className="text-primary text-xs">
+                      - {t("settings.recommended")}
+                    </span>
                   )}
                 </Typography>
               </CardTitle>
@@ -40,33 +46,29 @@ const Subscriptions = () => {
             <CardContent className="py-6">
               <div className="grid grid-cols-2 text-sm gap-4 max-w-4xl">
                 <div className="space-x-1 flex items-center">
-                  <span className="block font-semibold">Current plan:</span>
+                  <span className="block font-semibold">
+                    {t("general.subscription")}: :
+                  </span>
                   <span className="block text-primary">Basic</span>
                 </div>
                 <div className="space-x-2 flex items-center">
-                  <span className="block font-semibold">Monthly price:</span>
+                  <span className="block font-semibold">
+                    {t("settings.monthly_cost")}:
+                  </span>
                   <span className="block text-primary">$19</span>
                 </div>
                 <div className="space-x-2 flex items-center">
-                  <span className="block font-semibold">Monthly price:</span>
-                  <span className="block text-primary">$19</span>
-                </div>
-                <div className="space-x-2 flex items-center">
-                  <span className="block font-semibold">Monthly price:</span>
-                  <span className="block text-primary">$19</span>
-                </div>
-                <div className="space-x-2 flex items-center">
-                  <span className="block font-semibold">Monthly price:</span>
-                  <span className="block text-primary">$19</span>
-                </div>
-                <div className="space-x-2 flex items-center">
-                  <span className="block font-semibold">Monthly price:</span>
-                  <span className="block text-primary">$19</span>
+                  <span className="block font-semibold">
+                    {t("settings.allowance")}:
+                  </span>
+                  <span className="block text-primary">
+                    1000 {t("settings.tokens")}
+                  </span>
                 </div>
               </div>
               <div>
                 <Typography variant="sectionSubtitle" className="mt-4">
-                  Features
+                  {t("settings.features")}:
                 </Typography>
                 <ul className="pl-5 mt-2 list-disc">
                   <li>Unlimited templates</li>
@@ -81,7 +83,7 @@ const Subscriptions = () => {
                 className="w-full md:w-auto"
                 variant={item === 2 ? "default" : "outline"}
               >
-                Subscribe now
+                {t("settings.subscribe")}
               </Button>
             </CardFooter>
           </Card>

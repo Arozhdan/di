@@ -9,5 +9,6 @@ export { selectTimeSaved } from './model/selectors/selectTimeSaved/selectTimeSav
 export { selectCostsSaved } from './model/selectors/selectCostsSaved/selectCostsSaved';
 
 export { initAuth } from './model/services/initAuth/initAuth.service';
+export { updateUserInfo } from './model/services/updateUser/updateUser.service';
 
 export { userReducer, userActions } from './model/slice/User.slice';

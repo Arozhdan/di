@@ -7,12 +7,14 @@ import { FC } from "react";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { useSelector } from "react-redux";
 import { historyActions, selectHistoryFilters } from "@/entities/History";
+import { useTranslation } from "react-i18next";
 
 interface Props extends React.ComponentPropsWithoutRef<"div"> {
   className?: string;
 }
 
 export const HistoryFilters: FC<Props> = ({ className, ...props }) => {
+  const { t } = useTranslation();
   const filters = useSelector(selectHistoryFilters);
   const isDirty =
     !!filters &&
@@ -47,7 +49,7 @@ export const HistoryFilters: FC<Props> = ({ className, ...props }) => {
             historyActions.setFilter({ key: "input", value: e.target.value })
           );
         }}
-        placeholder="Filter tasks..."
+        placeholder={t("general.search")}
         className="h-8 w-full md:w-[150px] lg:w-[200px] xl:w-[340px] mb-3 md:mb-0"
       />
       <Toggle
@@ -62,8 +64,7 @@ export const HistoryFilters: FC<Props> = ({ className, ...props }) => {
         }}
       >
         <PinIcon className="h-4 w-4 mr-2" />
-        <span className="hidden md:inline">Only&nbsp;</span>
-        <span className="md:lowercase">Pinned</span>
+        {t("history.only_pinned")}
       </Toggle>
       <InstrumentFilter className="ml-3" />
       {isDirty && (
@@ -74,7 +75,7 @@ export const HistoryFilters: FC<Props> = ({ className, ...props }) => {
           onClick={clearFilters}
         >
           <Trash2Icon className="mr-2 h-4 w-4  group-hover:scale-95" />
-          Clear filters
+          {t("general.clear_filters")}
         </Button>
       )}
     </div>

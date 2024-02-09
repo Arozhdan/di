@@ -23,7 +23,12 @@ export const fetchInstruments = createAsyncThunk<
 >('instrument/fetch', async (_, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
-    const response = await extra.api.get<InstrumentsResponse>("/instruments");
+    const locale = extra.i18n.language;
+    const response = await extra.api.get<InstrumentsResponse>("/instruments", {
+      params: {
+        locale,
+      },
+    });
 
     if (!response.data || !response.data.docs.length) {
       throw new Error()

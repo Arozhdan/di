@@ -20,6 +20,7 @@ import {
 } from "@shared/components/ui/command";
 import { CheckIcon, PlusCircleIcon } from "lucide-react";
 import { FC, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 interface Props extends React.ComponentPropsWithoutRef<"div"> {
@@ -27,6 +28,7 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
 }
 
 export const InstrumentFilter: FC<Props> = ({ className }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const filters = useSelector(selectHistoryFilters);
   const instruments = filters?.instruments ?? [];
@@ -58,7 +60,8 @@ export const InstrumentFilter: FC<Props> = ({ className }) => {
           className={cn("h-8 border-dashed", className)}
         >
           <PlusCircleIcon className="mr-2 h-4 w-4" />
-          Instrument
+
+          {t("general.instrument")}
           {instruments?.length > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
@@ -99,9 +102,9 @@ export const InstrumentFilter: FC<Props> = ({ className }) => {
         align="start"
       >
         <Command>
-          <CommandInput placeholder={"Type"} />
+          <CommandInput placeholder={t("general.search")} />
           <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandEmpty>{t("general.no_results")}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
                 const isSelected = instruments.includes(option.value);
@@ -159,7 +162,7 @@ export const InstrumentFilter: FC<Props> = ({ className }) => {
                       )
                     }
                   >
-                    Clear filters
+                    {t("general.clear_filters")}
                   </CommandItem>
                 </CommandGroup>
               </>

@@ -16,6 +16,10 @@ import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { AlertCircleIcon } from "lucide-react";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { selectUser, updateUserInfo } from "@/entities/User";
+import { useAppDispatch } from "@/shared/lib/utils";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -57,25 +61,38 @@ const formSchema = z.object({
 });
 
 export const Profile = () => {
+  const { t } = useTranslation();
+  const user = useSelector(selectUser);
+  const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      phone: "",
-      address: "",
+      username: user?.username || user?.email || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+      address: user?.address || "",
     },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    if (!user) return;
+    dispatch(
+      updateUserInfo({
+        id: user.id,
+        username: data.username,
+        phone: data.phone || "",
+        address: data.address || "",
+      })
+    );
+
+    form.reset(data);
   };
 
   return (
     <div className="container px-0">
-      <Typography variant="sectionSubtitle">Profile</Typography>
+      <Typography variant="sectionSubtitle">{t("general.profile")}</Typography>
       <Typography className="text-gray-500 border-b pb-4">
-        Manage your profile information, such as your name and email address.
+        {t("settings.profile_subtitle")}
       </Typography>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-6">
@@ -84,7 +101,7 @@ export const Profile = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username*</FormLabel>
+                <FormLabel>{t("settings.username")}*</FormLabel>
                 <FormControl>
                   <Input placeholder="username" {...field} />
                 </FormControl>
@@ -98,7 +115,7 @@ export const Profile = () => {
                       {form.formState.errors.username.message}
                     </span>
                   ) : (
-                    "This is the name that will be displayed on your profile."
+                    t("settings.username_desc")
                   )}
                 </FormDescription>
               </FormItem>
@@ -109,9 +126,10 @@ export const Profile = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email*</FormLabel>
+                <FormLabel>{t("settings.email")}*</FormLabel>
                 <FormControl>
                   <Input
+                    disabled
                     type="email"
                     placeholder="example@email.com"
                     {...field}
@@ -127,7 +145,7 @@ export const Profile = () => {
                       {form.formState.errors.email.message}
                     </span>
                   ) : (
-                    "E-mail address associated with your account."
+                    t("settings.email_desc")
                   )}
                 </FormDescription>
               </FormItem>
@@ -139,8 +157,10 @@ export const Profile = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Phone{" "}
-                  <span className="text-gray-500 text-xs">(optional)</span>
+                  {t("settings.phone")}{" "}
+                  <span className="text-gray-500 text-xs">
+                    ({t("general.optional")})
+                  </span>
                 </FormLabel>
                 <FormControl>
                   <Input type="tel" placeholder="+1 123 456 7890" {...field} />
@@ -155,7 +175,7 @@ export const Profile = () => {
                       {form.formState.errors.phone.message}
                     </span>
                   ) : (
-                    "This is the name that will be displayed on your profile."
+                    ""
                   )}
                 </FormDescription>
               </FormItem>
@@ -167,8 +187,10 @@ export const Profile = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Address
-                  <span className="text-gray-500 text-xs">(optional)</span>
+                  {t("settings.address")}{" "}
+                  <span className="text-gray-500 text-xs">
+                    ({t("general.optional")})
+                  </span>
                 </FormLabel>
                 <FormControl>
                   <Textarea className="resize-none" {...field} />
@@ -183,14 +205,14 @@ export const Profile = () => {
                       {form.formState.errors.address.message}
                     </span>
                   ) : (
-                    "This is the name that will be displayed on your profile."
+                    ""
                   )}
                 </FormDescription>
               </FormItem>
             )}
           />
           <Button disabled={!form.formState.isDirty} type="submit">
-            Submit
+            {t("settings.submit")}
           </Button>
         </form>
       </Form>

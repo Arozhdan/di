@@ -18,46 +18,49 @@ import {
 } from "lucide-react";
 
 import { LOCAL_STORAGE } from "@lib/consts";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const links = [
-  {
-    title: "Dashboard",
-    url: RoutePath.main,
-    icon: LayoutDashboardIcon,
-  },
-  {
-    title: "Instruments",
-    url: RoutePath.instruments,
-    icon: BotIcon,
-  },
-  {
-    title: "History",
-    url: RoutePath.history,
-    icon: BookMarkedIcon,
-  },
-  {
-    title: "Templates",
-    url: RoutePath.templates,
-    icon: PencilRulerIcon,
-  },
-  {
-    title: "Settings",
-    url: RoutePath.profile_settings,
-    icon: Settings2Icon,
-  },
-  {
-    title: "ChatPRO",
-    url: RoutePath.chat,
-    icon: MessagesSquareIcon,
-  },
-];
-
 export const Layout: FC<Props> = ({ children }) => {
+  const { t } = useTranslation();
   let defaultSidebarSize = 12;
+
+  const links = [
+    {
+      title: t("general.dashboard"),
+      url: RoutePath.main,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: t("general.instruments"),
+      url: RoutePath.instruments,
+      icon: BotIcon,
+    },
+    {
+      title: t("general.history"),
+      url: RoutePath.history,
+      icon: BookMarkedIcon,
+    },
+    {
+      title: t("general.templates"),
+      url: RoutePath.templates,
+      icon: PencilRulerIcon,
+      disabled: true,
+    },
+    {
+      title: t("general.settings"),
+      url: RoutePath.profile_settings,
+      icon: Settings2Icon,
+    },
+    {
+      title: t("general.chatPRO"),
+      url: RoutePath.chat,
+      icon: MessagesSquareIcon,
+    },
+  ];
 
   try {
     const sidebarSizeFromStorage = JSON.parse(
@@ -93,6 +96,9 @@ export const Layout: FC<Props> = ({ children }) => {
   const handleSidebarResize = (size: number) => {
     setSidebarWidth(size);
     localStorage.setItem(LOCAL_STORAGE.SIDEBAR_WIDTH, JSON.stringify(size));
+    if (size < minSidebarWidth) {
+      setIsCollapsed(true);
+    }
   };
 
   if (isMobile) {

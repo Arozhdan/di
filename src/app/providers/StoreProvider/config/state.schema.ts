@@ -14,6 +14,7 @@ import { InstrumentSchema } from "@/entities/Instrument"
 import { SiteSettingsSchema } from "@/entities/SiteSettings"
 import { HistorySchema } from "@/entities/History"
 import { ChatSchema } from "@/pages/Chat"
+import { i18n } from "i18next"
 
 export type CombinedState<S> = {
   [K in keyof S]: S[K]
@@ -47,6 +48,7 @@ export interface ReduxStoreWithManager extends EnhancedStore<StateSchema> {
 export interface ThunkExtraArg {
   api: AxiosInstance
   navigate?: (to: To, options?: NavigateOptions) => void
+  i18n: i18n
 }
 
 export interface ThunkConfig<T> {

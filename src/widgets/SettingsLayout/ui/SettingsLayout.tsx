@@ -4,6 +4,7 @@ import { buttonVariants } from "@/shared/components/ui/button";
 import { cn, useMediaQuery } from "@/shared/lib/utils";
 import { ArrowLeftIcon } from "lucide-react";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, NavLink } from "react-router-dom";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,6 +14,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 export const SettingsLayout: FC<Props> = ({ children }) => {
   const isMobile = useMediaQuery("(max-width: 1024px)");
   const isSmallMobile = useMediaQuery("(max-width: 400px)");
+  const { t } = useTranslation();
   return (
     <div className="w-full mx-auto px-4 lg:px-8 pt-2 lg:pt-6 h-screen overflow-y-auto overflow-x-hidden pb-10">
       <Link
@@ -23,12 +25,11 @@ export const SettingsLayout: FC<Props> = ({ children }) => {
         )}
       >
         <ArrowLeftIcon size={14} className="mr-2 group-hover:scale-95" />
-        Back to Dashboard
+        {t("settings.back_to_dashboard")}
       </Link>
-      <Typography variant="pageTitle">Settings</Typography>
+      <Typography variant="pageTitle">{t("general.settings")}</Typography>
       <Typography className="text-gray-500 border-b pb-4 mb-2 lg:mb-6">
-        Customize the appearance of the app. Automatically switch between day
-        and night themes. .
+        {t("settings.settings_subtitle")}
       </Typography>
       <div className="lg:flex">
         <div className="flex justify-between lg:space-y-1 lg:w-64 lg:block mb-6 lg:mb-0 lg:mr-10">
@@ -47,7 +48,7 @@ export const SettingsLayout: FC<Props> = ({ children }) => {
               )
             }
           >
-            Profile
+            {t("general.profile")}
           </NavLink>
           <NavLink
             to={RoutePath.appearance_settings}
@@ -64,7 +65,7 @@ export const SettingsLayout: FC<Props> = ({ children }) => {
               )
             }
           >
-            Appearance
+            {t("general.appearance")}
           </NavLink>
           <NavLink
             to={RoutePath.notifications_settings}
@@ -81,7 +82,7 @@ export const SettingsLayout: FC<Props> = ({ children }) => {
               )
             }
           >
-            Notifications
+            {t("general.notifications")}
           </NavLink>
           <NavLink
             to={RoutePath.billing_settings}
@@ -98,7 +99,7 @@ export const SettingsLayout: FC<Props> = ({ children }) => {
               )
             }
           >
-            Billing
+            {t("general.billing")}
           </NavLink>
         </div>
         {children}

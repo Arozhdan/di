@@ -26,20 +26,26 @@ import {
 } from "@/shared/components/ui/tabs";
 import { cn } from "@/shared/lib/utils";
 import { withSettingsLayout } from "@/widgets/SettingsLayout";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export const Billing = () => {
+  const { t } = useTranslation();
   return (
     <div className="container px-0">
-      <Typography variant="sectionSubtitle">Billing</Typography>
+      <Typography variant="sectionSubtitle">{t("general.billing")}</Typography>
       <Typography className="text-gray-500 border-b pb-4">
-        Manage your billing and subscription settings .
+        {t("settings.billing_subtitle")}
       </Typography>
       <div className="mt-6">
         <Tabs defaultValue="subscription">
           <TabsList>
-            <TabsTrigger value="subscription">My subscription</TabsTrigger>
-            <TabsTrigger value="history">Payment history</TabsTrigger>
+            <TabsTrigger value="subscription">
+              {t("settings.my_subscription")}
+            </TabsTrigger>
+            <TabsTrigger value="history">
+              {t("settings.payment_history")}
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="subscription" className="pt-4">
             <Card className="max-w-4xl">
@@ -56,39 +62,56 @@ export const Billing = () => {
               <CardContent className="py-6">
                 <div className="grid md:grid-cols-2 text-sm gap-4 max-w-2xl">
                   <div className="space-x-1 flex items-center">
-                    <span className="block font-semibold">Current plan:</span>
+                    <span className="block font-semibold">
+                      {t("settings.current_plan")}:
+                    </span>
                     <span className="block text-primary">Free trial</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">Monthly price:</span>
+                    <span className="block font-semibold">
+                      {t("settings.monthly_cost")}:
+                    </span>
                     <span className="block text-primary">$9.99</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">Start date:</span>
+                    <span className="block font-semibold">
+                      {t("settings.start_date")}:
+                    </span>
                     <span className="block text-primary">01/01/2021</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">End date:</span>
+                    <span className="block font-semibold">
+                      {t("settings.end_date")}:
+                    </span>
                     <span className="block text-primary">01/01/2022</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">Status:</span>
+                    <span className="block font-semibold">
+                      {t("settings.status")}:
+                    </span>
                     <span className="block text-primary">Active</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">Next payment:</span>
+                    <span className="block font-semibold">
+                      {t("settings.next_payment")}:
+                    </span>
                     <span className="block text-primary">01/02/2022</span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">Allowance:</span>
+                    <span className="block font-semibold">
+                      {t("settings.allowance")}:
+                    </span>
                     <span className="block text-primary">
-                      1000 tokens / month
+                      1000 {t("settings.tokens_per_month")}
                     </span>
                   </div>
                   <div className="space-x-2 flex items-center">
-                    <span className="block font-semibold">My usage:</span>
+                    <span className="block font-semibold">
+                      {t("general.my_usage")}:
+                    </span>
                     <span className="block text-primary">
-                      131 tokens <small>(13%)</small>
+                      131 {t("settings.tokens")} {""}
+                      <small>(13%)</small>
                     </span>
                   </div>
                 </div>
@@ -116,7 +139,7 @@ export const Billing = () => {
                     )}
                     to={RoutePath.subscriptions_settings}
                   >
-                    Upgrade plan
+                    {t("settings.change_plan")}
                   </Link>
 
                   <Button
@@ -124,7 +147,7 @@ export const Billing = () => {
                     variant="ghost"
                     size="sm"
                   >
-                    Cancel subscription
+                    {t("settings.cancel_plan")}
                   </Button>
                 </div>
               </CardFooter>
@@ -132,13 +155,19 @@ export const Billing = () => {
           </TabsContent>
           <TabsContent value="history" className="pt-4">
             <Table className="max-w-4xl">
-              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableCaption>
+                {t("settings.list_of_recent_invoices")}
+              </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Invoice</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Method</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="w-[100px]">
+                    {t("settings.invoice")}
+                  </TableHead>
+                  <TableHead>{t("settings.status")}</TableHead>
+                  <TableHead>{t("settings.method")}</TableHead>
+                  <TableHead className="text-right">
+                    {t("settings.amount")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

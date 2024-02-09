@@ -12,6 +12,7 @@ import { instrumentReducer } from "@/entities/Instrument"
 import { siteSettingsReducer } from "@/entities/SiteSettings"
 import { historyReducer } from "@/entities/History"
 import { chatReducer } from "@/pages/Chat"
+import i18next from "i18next"
 
 
 
@@ -38,6 +39,7 @@ export function createReduxStore(
   const extraArg: ThunkExtraArg = {
     api: $api,
     navigate,
+    i18n: i18next
   }
 
   const store = configureStore({

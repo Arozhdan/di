@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectGlobalSearch } from "../..";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const GlobalSearch = ({
   open,
@@ -22,19 +23,14 @@ const GlobalSearch = ({
 }) => {
   const search = useSelector(selectGlobalSearch);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Type a command or search..." />
+      <CommandInput placeholder={t("general.type_command_or_search")} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>{t("general.no_results")}</CommandEmpty>
         {search.map((section, index) => (
-          <CommandGroup
-            heading={section.title}
-            key={index}
-            onSelect={(e) => {
-              console.log(e);
-            }}
-          >
+          <CommandGroup heading={section.title} key={index}>
             {section.pages.map((item, index) => (
               <CommandItem
                 key={index}

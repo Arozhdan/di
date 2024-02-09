@@ -34,8 +34,10 @@ import { Typography } from "@/shared/components/Typography/Typography";
 import { withSettingsLayout } from "@/widgets/SettingsLayout";
 import { Switch } from "@/shared/components/ui/switch";
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { useTranslation } from "react-i18next";
 
 export const Notifications = () => {
+  const { t } = useTranslation();
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues,
@@ -47,9 +49,11 @@ export const Notifications = () => {
 
   return (
     <div className="container px-0">
-      <Typography variant="sectionSubtitle">Notifications</Typography>
+      <Typography variant="sectionSubtitle">
+        {t("general.notifications")}
+      </Typography>
       <Typography className="text-gray-500 border-b pb-4">
-        Manage application Notifications settings.
+        {t("settings.notifications_subtitle")}
       </Typography>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-6">
@@ -62,10 +66,10 @@ export const Notifications = () => {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Communication emails
+                        {t("settings.communication_emails")}
                       </FormLabel>
                       <FormDescription>
-                        Receive emails about your account activity.
+                        {t("settings.communication_emails_desc")}
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -84,30 +88,10 @@ export const Notifications = () => {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Marketing emails
+                        {t("settings.marketing_emails")}
                       </FormLabel>
                       <FormDescription>
-                        Receive emails about new products, features, and more.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="social_emails"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Social emails</FormLabel>
-                      <FormDescription>
-                        Receive emails for friend requests, follows, and more.
+                        {t("settings.marketing_emails_desc")}
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -126,10 +110,10 @@ export const Notifications = () => {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Security emails
+                        {t("settings.security_emails")}
                       </FormLabel>
                       <FormDescription>
-                        Receive emails about your account activity and security.
+                        {t("settings.security_emails_desc")}
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -157,20 +141,15 @@ export const Notifications = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    Enable push notifications on your mobile device
-                  </FormLabel>
-                  <FormDescription>
-                    Push notifications are sent to your mobile device when you
-                    are offline.
-                  </FormDescription>
+                  <FormLabel>{t("settings.enable_push")}</FormLabel>
+                  <FormDescription>{t("settings.push_desc")}</FormDescription>
                 </div>
               </FormItem>
             )}
           />
           <div className="pt-6">
             <Button disabled={!form.formState.isDirty} type="submit">
-              Update notifications
+              {t("settings.upd_settings")}
             </Button>
           </div>
         </form>
