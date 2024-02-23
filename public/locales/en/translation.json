@@ -119,8 +119,9 @@
     "recommended": "Recommended",
     "subscribe": "Subscribe now",
     "change_plan": "Change plan",
-    "cancel_subscription": "Cancel subscription",
-    "features": "Features"
+    "cancel_plan": "Cancel subscription",
+    "features": "Features",
+    "unlimited": "Unlimited"
   },
   "chat": {
     "create_new_chat": "Create new chat",

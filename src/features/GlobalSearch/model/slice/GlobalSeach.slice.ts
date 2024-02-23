@@ -16,10 +16,6 @@ const initialState: GlobalSearchSchema = {
         url: RoutePath.history,
       },
       {
-        label: "Templates",
-        url: RoutePath.templates,
-      },
-      {
         label: "Settings",
         url: RoutePath.profile_settings,
       },

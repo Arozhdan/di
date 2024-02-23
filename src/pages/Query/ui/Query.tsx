@@ -4,6 +4,7 @@ import {
   editHistory,
   pinHistory,
   selectHistoryById,
+  selectHistoryIsLoading,
   selectIsRecordLoading,
   selectIsRegenerating,
   unpinHistory,
@@ -53,6 +54,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
 import { selectHistoryByInstrument } from "@/entities/History/model/selectors/selectHistoryByInstrument/selectHistoryByInstrument";
+import { PageLoader } from "@/widgets/Loader";
 
 const Query = () => {
   const [isCustomCommandOpen, setIsCustomCommandOpen] = useState(false);
@@ -63,6 +65,7 @@ const Query = () => {
   const dispatch = useAppDispatch();
   const isUpdating = useSelector(selectIsRecordLoading);
   const isRegenerating = useSelector(selectIsRegenerating);
+  const isListLoading = useSelector(selectHistoryIsLoading);
 
   const data = useSelector((state: StateSchema) =>
     selectHistoryById(state, params.id)
@@ -147,6 +150,10 @@ const Query = () => {
     }
   }, [data]);
 
+  if (isListLoading) {
+    return <PageLoader />;
+  }
+
   if (!data) {
     return <div className="page">Not found</div>;
   }
@@ -171,7 +178,7 @@ const Query = () => {
         </div>
       </Navbar>
       <div className="page">
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-x-10 w-full h-full px-1 overflow-hidden">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-x-10 w-full h-full px-1">
           <div className="col-span-3 flex flex-col">
             <div>
               <Typography variant="sectionSubtitle">{data.input}</Typography>
@@ -206,7 +213,7 @@ const Query = () => {
                 <CopyIcon size={16} />
               </Button>
             </div>
-            <div className="mt-auto mb-1 grid gap-2 lg:gap-0 flex-shrink-0 lg:flex">
+            <div className="mt-auto mb-2 grid gap-2 lg:gap-0 flex-shrink-0 lg:flex">
               <Button
                 className="row-start-3"
                 type="submit"

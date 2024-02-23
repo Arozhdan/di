@@ -17,17 +17,15 @@ export interface SubscriptionsLink {
   currency: string
   isFeatured: boolean
   id: string
+  description: any[]
 }
 
 export interface Tier {
   id: string
+  name: string
+  allowance: number
   createdAt: string
   updatedAt: string
   allowChat: boolean
   allowTemplates: boolean
-}
-
-export interface Description {
-  children: any[]
-  type: string
 }

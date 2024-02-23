@@ -10,6 +10,11 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form";
 import { Button } from "@/shared/components/ui/button";
+import { Typography } from "@/shared/components/Typography/Typography";
+import { withSettingsLayout } from "@/widgets/SettingsLayout";
+import { Switch } from "@/shared/components/ui/switch";
+import { Checkbox } from "@/shared/components/ui/checkbox";
+import { useTranslation } from "react-i18next";
 
 const notificationsFormSchema = z.object({
   push: z.boolean().default(false).optional(),
@@ -23,18 +28,12 @@ type NotificationsFormValues = z.infer<typeof notificationsFormSchema>;
 
 // This can come from your database or API.
 const defaultValues: Partial<NotificationsFormValues> = {
-  communication_emails: true,
-  marketing_emails: true,
-  social_emails: true,
-  security_emails: true,
-  push: true,
+  communication_emails: false,
+  marketing_emails: false,
+  social_emails: false,
+  security_emails: false,
+  push: false,
 };
-
-import { Typography } from "@/shared/components/Typography/Typography";
-import { withSettingsLayout } from "@/widgets/SettingsLayout";
-import { Switch } from "@/shared/components/ui/switch";
-import { Checkbox } from "@/shared/components/ui/checkbox";
-import { useTranslation } from "react-i18next";
 
 export const Notifications = () => {
   const { t } = useTranslation();
@@ -74,6 +73,7 @@ export const Notifications = () => {
                     </div>
                     <FormControl>
                       <Switch
+                        disabled
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
@@ -96,6 +96,7 @@ export const Notifications = () => {
                     </div>
                     <FormControl>
                       <Switch
+                        disabled
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
@@ -118,9 +119,9 @@ export const Notifications = () => {
                     </div>
                     <FormControl>
                       <Switch
+                        disabled
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        disabled
                         aria-readonly
                       />
                     </FormControl>
@@ -136,6 +137,7 @@ export const Notifications = () => {
               <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                 <FormControl>
                   <Checkbox
+                    disabled
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
