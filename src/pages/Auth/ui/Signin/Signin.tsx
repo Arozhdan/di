@@ -17,11 +17,12 @@ import { useEffect, useState } from "react";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { LOCAL_STORAGE } from "@/shared/lib/consts";
 import { EyeIcon } from "lucide-react";
-import { selectLocalSigninError, signinLocal } from "@/features/AuthLocal";
+import { selectLocalAuthError, signinLocal } from "@/features/AuthLocal";
 import { useSelector } from "react-redux";
 import { selectIsLocalSigninLoading } from "@/features/AuthLocal";
 import { Link, useNavigate } from "react-router-dom";
 import { selectAuthenticated } from "@/entities/User";
+import { useTranslation } from "react-i18next";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -31,10 +32,11 @@ const formSchema = z.object({
 });
 
 const Signin = () => {
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const authenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
-  const error = useSelector(selectLocalSigninError);
+  const error = useSelector(selectLocalAuthError);
   useEffect(() => {
     if (authenticated) {
       navigate("/");
@@ -79,21 +81,29 @@ const Signin = () => {
             src="/logo.svg"
             className="brightness-[100] max-w-[120px]"
             alt=""
-          />
+          />{" "}
+          <Button
+            variant={"link"}
+            onClick={() =>
+              i18n.changeLanguage(i18n.language === "en" ? "ru" : "en")
+            }
+            className="py-0 h-7 ml-auto text-white"
+          >
+            {i18n.language === "en" ? "RU" : "EN"}
+          </Button>{" "}
         </div>
         <div className="text-white relative z-10 pb-10 px-8 flex space-x-6">
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
+          <a href="/tos.pdf">{t("auth.tos")}</a>
+          <a href="/privacy.pdf">{t("auth.privacy")}</a>
         </div>
       </div>
       <div className="min-h-screen flex flex-col justify-center items-center py-6 px-4 lg:px-10">
         <div>
           <Typography variant="sectionTitle" className="text-center">
-            Sign in
+            {t("auth.signin.title")}
           </Typography>
           <p className="max-w-md text-center mt-3 text-gray-500">
-            Sign in to your account to continue. If you don't have an account,
-            you can{" "}
+            {t("auth.signin.subtitle")}
             <Link
               to="/signup"
               className={cn(
@@ -103,7 +113,7 @@ const Signin = () => {
                 "underline px-1"
               )}
             >
-              sign up
+              {t("auth.signin.signup")}
             </Link>
           </p>
           <Form {...form}>
@@ -124,7 +134,7 @@ const Signin = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="sr-only">Email address</FormLabel>
+                    <FormLabel className="sr-only">Email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
@@ -142,11 +152,13 @@ const Signin = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="sr-only">Password</FormLabel>
+                    <FormLabel className="sr-only">
+                      {t("auth.password")}
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
-                          placeholder="Password"
+                          placeholder={t("auth.password")}
                           type={passwordType}
                           {...field}
                         />
@@ -173,12 +185,12 @@ const Signin = () => {
                 className="w-full mt-2"
                 loading={isLocalLoading}
               >
-                Sign in with email
+                {t("auth.signin.submit")}
               </Button>
             </form>
             <div className="relative flex justify-center w-full max-w-md mb-6">
               <div className="text-gray-500 relative z-10 bg-background px-4 uppercase text-xs">
-                Or continue with
+                {t("auth.signin.or")}
               </div>
               <div className="absolute w-full h-px bg-accent top-1/2" />
             </div>
@@ -201,14 +213,18 @@ const Signin = () => {
               </Button>
             </div>
             <div className="max-w-md text-center mt-6 px-10 text-gray-500">
-              By continuing, you agree to our{" "}
-              <a href="#" className="underline">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="underline">
-                Privacy Policy
-              </a>
+              {t("auth.signin.forgot")}
+              <Link
+                to="/forgot-password"
+                className={cn(
+                  buttonVariants({
+                    variant: "link",
+                  }),
+                  "underline px-1"
+                )}
+              >
+                {t("auth.signin.forgotLink")}
+              </Link>
             </div>
           </Form>
         </div>

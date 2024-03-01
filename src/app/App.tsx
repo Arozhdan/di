@@ -7,7 +7,7 @@ import {
 } from "@/entities/User";
 import { Suspense, useEffect } from "react";
 import { useAppDispatch } from "@/shared/lib/utils";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchInstruments } from "@/entities/Instrument";
 import { fetchSiteSettings } from "@/entities/SiteSettings";
 import { fetchHistory } from "@/entities/History";
@@ -18,6 +18,7 @@ function App() {
   const inited = useSelector(selectAuthInited);
   const isAuthenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
+  const path = useLocation().pathname;
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isAuthenticated && inited) {
+    if (!isAuthenticated && inited && path !== RoutePath.signup) {
       navigate(RoutePath.signin);
     }
     if (isAuthenticated && inited) {
@@ -33,7 +34,8 @@ function App() {
       dispatch(fetchSiteSettings());
       dispatch(fetchHistory());
     }
-  }, [isAuthenticated, inited, dispatch, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, inited, i18n.language]);
 
   return <Suspense fallback="">{inited && <AppRouter />}</Suspense>;
 }

@@ -6,13 +6,13 @@ import { CombinedState, StateSchema, ThunkExtraArg } from "./state.schema"
 import { createReducerManager } from "./reducerManager"
 import { $api } from "@/shared/lib/api"
 import { userReducer } from "@/entities/User"
-import { signinLocalReducer } from "@/features/AuthLocal"
 import { globalSearchReducer } from "@/features/GlobalSearch"
 import { instrumentReducer } from "@/entities/Instrument"
 import { siteSettingsReducer } from "@/entities/SiteSettings"
 import { historyReducer } from "@/entities/History"
 import { chatReducer } from "@/pages/Chat"
 import i18next from "i18next"
+import { authLocalReducer } from "@/features/AuthLocal"
 
 
 
@@ -26,7 +26,7 @@ export function createReduxStore(
     ...asyncReducers,
     globalSearch: globalSearchReducer,
     auth: userReducer,
-    signinLocal: signinLocalReducer,
+    authLocal: authLocalReducer,
     user: userReducer,
     instrument: instrumentReducer,
     siteSettings: siteSettingsReducer,

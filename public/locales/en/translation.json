@@ -131,5 +131,31 @@
     "polite": "Polite",
     "neutral": "Neutral",
     "positive": "Positive"
+  },
+  "auth": {
+    "signin": {
+      "title": "Sign in",
+      "subtitle": "Create a new account or in case if you have one, please",
+      "signup": "create a new one",
+      "submit": "Sign in with your email",
+      "or": "Or proceed with",
+      "tos": "By continuing, you agree to our Terms of Service and Privacy Policy",
+      "forgot": "Forgot password?",
+      "forgotLink": "We got you covered!"
+    },
+    "password": "Password",
+    "tos": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "signup": {
+      "title": "Sign up",
+      "signin": "sign in to an existing one",
+      "submit": "Sign up with an email",
+      "or": "Or proceed with",
+      "alert": "By proceeding you agree with terms of service and privacy policy",
+      "subtitle": "Create a new account or "
+    },
+    "repeatPassword": "Confirm password",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "passwordsDontMatch": "Passwords do not match"
   }
 }

@@ -15,7 +15,7 @@ import { Query } from "@/pages/Query";
 import { CreateTemplate } from "@/pages/CreateTemplate";
 import { Chat } from "@/pages/Chat";
 import { SingleTemplate } from "@/pages/SingleTemplate";
-import { Signin } from "@/pages/Auth";
+import { Signin, Signup } from "@/pages/Auth";
 
 export type AppRoutesProps = RouteProps & {
   authOnly?: boolean;
@@ -38,6 +38,8 @@ export enum AppRoutes {
   SETTINGS_SUBSCRIPTIONS = "subscriptions_settings",
   CHAT = "chat",
   SIGNIN = "signin",
+  SIGNUP = "signup",
+  RESET_PASSWORD = "reset_password",
 
   // last
   NOT_FOUND = "not_found",
@@ -59,6 +61,8 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.SETTINGS_SUBSCRIPTIONS]: "/settings/billing/subscriptions",
   [AppRoutes.CHAT]: "/chat",
   [AppRoutes.SIGNIN]: "/signin",
+  [AppRoutes.SIGNUP]: "/signup",
+  [AppRoutes.RESET_PASSWORD]: "/reset-password",
 
   // последний
   [AppRoutes.NOT_FOUND]: "*",
@@ -145,6 +149,14 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.SIGNIN]: {
     path: RoutePath.signin,
+    element: <Signin />,
+  },
+  [AppRoutes.SIGNUP]: {
+    path: RoutePath.signup,
+    element: <Signup />,
+  },
+  [AppRoutes.RESET_PASSWORD]: {
+    path: RoutePath.reset_password,
     element: <Signin />,
   },
   [AppRoutes.NOT_FOUND]: {

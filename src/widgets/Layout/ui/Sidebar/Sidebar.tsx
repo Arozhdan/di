@@ -27,7 +27,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@components/hover-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
+import { Avatar, AvatarFallback } from "@components/avatar";
 import { Progress } from "@components/progress";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import { RoutePath } from "@/app/providers/Router";
@@ -270,7 +270,6 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
               <HoverCardTrigger>
                 <div className="flex group-[[data-collapsed=true]]:justify-center space-x-1 items-center overflow-hidden">
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png1" />
                     <AvatarFallback>
                       {username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>

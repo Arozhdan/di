@@ -9,7 +9,7 @@ import { type NavigateOptions, type To } from "react-router-dom"
 import type { AxiosInstance } from "axios"
 import { GlobalSearchSchema } from "@/features/GlobalSearch"
 import { UserSchema } from "@/entities/User"
-import { SigninLocalSchema } from "@/features/AuthLocal"
+import { AuthLocalSchema } from "@/features/AuthLocal"
 import { InstrumentSchema } from "@/entities/Instrument"
 import { SiteSettingsSchema } from "@/entities/SiteSettings"
 import { HistorySchema } from "@/entities/History"
@@ -24,7 +24,7 @@ export type CombinedState<S> = {
 export interface StateSchema {
   globalSearch: GlobalSearchSchema
   auth: UserSchema
-  signinLocal: SigninLocalSchema
+  authLocal: AuthLocalSchema
   user: UserSchema
   instrument: InstrumentSchema
   siteSettings: SiteSettingsSchema
