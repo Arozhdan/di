@@ -15,7 +15,7 @@ import { Query } from "@/pages/Query";
 import { CreateTemplate } from "@/pages/CreateTemplate";
 import { Chat } from "@/pages/Chat";
 import { SingleTemplate } from "@/pages/SingleTemplate";
-import { Signin, Signup } from "@/pages/Auth";
+import { Reset, Signin, Signup } from "@/pages/Auth";
 
 export type AppRoutesProps = RouteProps & {
   authOnly?: boolean;
@@ -62,7 +62,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.CHAT]: "/chat",
   [AppRoutes.SIGNIN]: "/signin",
   [AppRoutes.SIGNUP]: "/signup",
-  [AppRoutes.RESET_PASSWORD]: "/reset-password",
+  [AppRoutes.RESET_PASSWORD]: "/reset",
 
   // последний
   [AppRoutes.NOT_FOUND]: "*",
@@ -157,7 +157,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.RESET_PASSWORD]: {
     path: RoutePath.reset_password,
-    element: <Signin />,
+    element: <Reset />,
   },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,

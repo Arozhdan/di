@@ -22,7 +22,11 @@ export const fetchChat = createAsyncThunk<
 >('chat/fetchChat', async (_, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
-    const response = await extra.api.get<FetchChatResponse>('/chat');
+    const response = await extra.api.get<FetchChatResponse>('/chat', {
+      params: {
+        limit: 500,
+      },
+    });
 
     if (response.status !== 200 || !response.data) {
       return rejectWithValue('Error fetching chats. Please try again.');

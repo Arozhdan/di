@@ -35,6 +35,7 @@ import { useSelector } from "react-redux";
 import { User, selectUser } from "@/entities/User";
 import { signout } from "@/features/AuthLocal";
 import { useTranslation } from "react-i18next";
+import { selectSubscription } from "@/entities/Subscription";
 
 export interface Props extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -51,6 +52,16 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const user = useSelector(selectUser) as User;
+  const subscription = useSelector(selectSubscription);
+  const subAllowance =
+    subscription?.tier?.allowance === -1
+      ? "∞"
+      : subscription?.tier?.allowance || 0;
+  const persentage =
+    typeof subAllowance === "string"
+      ? 0
+      : Math.ceil((user?.monthlyQueries || 0) / subAllowance);
+
   const username =
     user.firstName && user.lastName
       ? user.firstName + " " + user.lastName
@@ -285,14 +296,16 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                 <div className="space-y-1 mb-3">
                   <b className="text-sm">{t("general.subscription")}:</b> <br />
                   <Link className="underline" to={RoutePath.billing_settings}>
-                    Basic Subscription
+                    {subscription?.tier?.name || "Free"}
                   </Link>
                 </div>
                 <div className="space-y-1">
                   <b className="text-sm">{t("general.my_usage")}:</b>
                   <br />
-                  <small className="text-xs">(33 / 100)</small>
-                  <Progress value={33} className="h-2" />
+                  <small className="text-xs">
+                    ({user.monthlyQueries || 0} / {subAllowance})
+                  </small>
+                  <Progress value={persentage || 1} className="h-2" />
                   <Button
                     variant="link"
                     className="px-0"

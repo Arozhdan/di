@@ -15,6 +15,7 @@ import { SiteSettingsSchema } from "@/entities/SiteSettings"
 import { HistorySchema } from "@/entities/History"
 import { ChatSchema } from "@/pages/Chat"
 import { i18n } from "i18next"
+import { SubscriptionSchema } from "@/entities/Subscription"
 
 export type CombinedState<S> = {
   [K in keyof S]: S[K]
@@ -30,6 +31,7 @@ export interface StateSchema {
   siteSettings: SiteSettingsSchema
   history: HistorySchema
   chat: ChatSchema
+  subscription: SubscriptionSchema
 }
 export type StateSchemaKey = keyof StateSchema
 export type MountedReducers = OptionalRecord<StateSchemaKey, boolean>;

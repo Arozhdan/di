@@ -34,7 +34,9 @@
     "menu": "Menu",
     "no_results": "No results",
     "type_command_or_search": "Type a command or search",
-    "navigation": "Navigation"
+    "navigation": "Navigation",
+    "cancel": "Cancel",
+    "submit": "Submit"
   },
   "dashboard": {
     "most_used_instrument": "Most used tool",
@@ -118,10 +120,12 @@
     "subs_desc": "Select a plan that works best for you",
     "recommended": "Recommended",
     "subscribe": "Subscribe now",
-    "change_plan": "Change plan",
+    "change_plan": "Get subscription",
     "cancel_plan": "Cancel subscription",
     "features": "Features",
-    "unlimited": "Unlimited"
+    "unlimited": "Unlimited",
+    "active": "Active",
+    "inactive": "Inactive"
   },
   "chat": {
     "create_new_chat": "Create new chat",
@@ -141,7 +145,8 @@
       "or": "Or proceed with",
       "tos": "By continuing, you agree to our Terms of Service and Privacy Policy",
       "forgot": "Forgot password?",
-      "forgotLink": "We got you covered!"
+      "forgotLink": "We got you covered!",
+      "forgotLabel": "Please, enter your email address"
     },
     "password": "Password",
     "tos": "Terms of Service",
@@ -156,6 +161,26 @@
     },
     "repeatPassword": "Confirm password",
     "passwordMinLength": "Password must be at least 6 characters",
-    "passwordsDontMatch": "Passwords do not match"
+    "passwordsDontMatch": "Passwords do not match",
+    "forgotPassword": {
+      "requestSuccess": "Success!",
+      "requestSuccessDescription": "We have sent you an email with instructions to reset your password.",
+      "requestError": "Something went wrong :(",
+      "requestErrorDescription": "We cannot reset your password."
+    },
+    "reset": {
+      "title": "Reset your password",
+      "subtitle": "You can reset you passwor using this page.",
+      "signin": "Back to sign in page.",
+      "newPassword": "New password",
+      "repeatPassword": "Confirm password"
+    },
+    "resetPassword": {
+      "error": "Something went wrong :(",
+      "errorDescription": "Password has not been updated.",
+      "successAction": "Sign in",
+      "success": "Password has successfilly been updated!",
+      "successDescription": "Now you can safely sign in"
+    }
   }
 }

@@ -34,7 +34,9 @@
     "menu": "Меню",
     "no_results": "Нет результатов",
     "type_command_or_search": "Начните печатать для команды или поиска",
-    "navigation": "Навигация"
+    "navigation": "Навигация",
+    "cancel": "Отменить",
+    "submit": "Подтвердить"
   },
   "dashboard": {
     "most_used_instrument": "Самый используемый инструмент",
@@ -118,10 +120,12 @@
     "subs_desc": "Выберите тариф, который лучше всего подходит Вам",
     "recommended": "Самый популярный",
     "subscribe": "Оформить подписку",
-    "change_plan": "Изменить тарифный план",
+    "change_plan": "Оформить подписку",
     "cancel_plan": "Отменить подписку",
     "features": "Возможности",
-    "unlimited": "Бесконечно"
+    "unlimited": "Бесконечно",
+    "inactive": "Не активна",
+    "active": "Активна"
   },
   "chat": {
     "create_new_chat": "Создать новый чат",
@@ -140,7 +144,8 @@
       "submit": "Войдите с помощью почты",
       "or": "Или воспользуйтесь",
       "forgot": "Забыли пароль?",
-      "forgotLink": "Восстановить."
+      "forgotLink": "Восстановить.",
+      "forgotLabel": "Пожалуйста, введите вашу почту"
     },
     "password": "Пароль",
     "tos": "Публичная оферта",
@@ -155,6 +160,26 @@
     },
     "repeatPassword": "Подтвердить пароль",
     "passwordMinLength": "Минимум 6 символов",
-    "passwordsDontMatch": "Пароли не совпадают"
+    "passwordsDontMatch": "Пароли не совпадают",
+    "forgotPassword": {
+      "requestSuccess": "Успех!",
+      "requestSuccessDescription": "Мы выслали инструкцию по восстановлению пароля на вашу почту.",
+      "requestError": "Что-то пошло не так(",
+      "requestErrorDescription": "Нам не удалось восстановить ваш пароль."
+    },
+    "reset": {
+      "title": "Восстановить пароль",
+      "subtitle": "Здесь вы можете поменять свой пароль.",
+      "signin": "Назад к авторизации.",
+      "newPassword": "Новый пароль",
+      "repeatPassword": "Подтвердить пароль"
+    },
+    "resetPassword": {
+      "error": "Что-то пошло не так :(",
+      "errorDescription": "Мы не смогли обновить ваш пароль.",
+      "successAction": "Войти",
+      "successDescription": "Теперь вы можете войти в профиль",
+      "success": "Пароль был успешно изменен!"
+    }
   }
 }

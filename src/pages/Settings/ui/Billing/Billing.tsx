@@ -1,4 +1,6 @@
 import { RoutePath } from "@/app/providers/Router";
+import { selectSubscription } from "@/entities/Subscription";
+import { selectUser } from "@/entities/User";
 import { Typography } from "@/shared/components/Typography/Typography";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import {
@@ -26,11 +28,25 @@ import {
 } from "@/shared/components/ui/tabs";
 import { cn } from "@/shared/lib/utils";
 import { withSettingsLayout } from "@/widgets/SettingsLayout";
+import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export const Billing = () => {
   const { t } = useTranslation();
+  const user = useSelector(selectUser);
+  const subscription = useSelector(selectSubscription);
+  const subAllowance =
+    subscription?.tier?.allowance === -1
+      ? t("settings.unlimited")
+      : subscription?.tier?.allowance || 0;
+
+  const persentage =
+    typeof subAllowance === "string"
+      ? 0
+      : Math.ceil((user?.monthlyQueries || 0) / subAllowance);
+
   return (
     <div className="container px-0">
       <Typography variant="sectionSubtitle">{t("general.billing")}</Typography>
@@ -43,7 +59,7 @@ export const Billing = () => {
             <TabsTrigger value="subscription">
               {t("settings.my_subscription")}
             </TabsTrigger>
-            <TabsTrigger value="history">
+            <TabsTrigger value="history" disabled>
               {t("settings.payment_history")}
             </TabsTrigger>
           </TabsList>
@@ -52,10 +68,7 @@ export const Billing = () => {
               <CardHeader className="border-b py-3">
                 <CardTitle>
                   <Typography variant="sectionSubtitle" as="span">
-                    Free trial subscription{" "}
-                    <small className="text-gray-500 font-normal">
-                      (trial ends in 7 days)
-                    </small>
+                    {subscription?.tier.name || "Free trial"}
                   </Typography>
                 </CardTitle>
               </CardHeader>
@@ -65,44 +78,69 @@ export const Billing = () => {
                     <span className="block font-semibold">
                       {t("settings.current_plan")}:
                     </span>
-                    <span className="block text-primary">Free trial</span>
+                    <span className="block text-primary">
+                      {subscription?.tier.name || "Free trial"}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.monthly_cost")}:
                     </span>
-                    <span className="block text-primary">$9.99</span>
+                    <span className="block text-primary">
+                      {subscription?.price || 0}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.start_date")}:
                     </span>
-                    <span className="block text-primary">01/01/2021</span>
+                    <span className="block text-primary">
+                      {format(
+                        subscription?.startDate || new Date(),
+                        "MM/dd/yyyy"
+                      )}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.end_date")}:
                     </span>
-                    <span className="block text-primary">01/01/2022</span>
+                    <span className="block text-primary">
+                      {format(
+                        subscription?.endDate || new Date(),
+                        "MM/dd/yyyy"
+                      )}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.status")}:
                     </span>
-                    <span className="block text-primary">Active</span>
+                    <span className="block text-primary">
+                      {subscription?.active
+                        ? t("settings.active")
+                        : t("settings.inactive")}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.next_payment")}:
                     </span>
-                    <span className="block text-primary">01/02/2022</span>
+                    <span className="block text-primary">
+                      {subscription?.nextPaymentDate ? (
+                        format(subscription?.nextPaymentDate, "MM/dd/yyyy")
+                      ) : (
+                        <span className="text-red-500">-</span>
+                      )}
+                    </span>
                   </div>
                   <div className="space-x-2 flex items-center">
                     <span className="block font-semibold">
                       {t("settings.allowance")}:
                     </span>
                     <span className="block text-primary">
-                      1000 {t("settings.tokens_per_month")}
+                      {subAllowance}
+                      {t("settings.tokens_per_month")}
                     </span>
                   </div>
                   <div className="space-x-2 flex items-center">
@@ -110,45 +148,33 @@ export const Billing = () => {
                       {t("general.my_usage")}:
                     </span>
                     <span className="block text-primary">
-                      131 {t("settings.tokens")} {""}
-                      <small>(13%)</small>
+                      {user?.monthlyQueries || 0} {t("settings.tokens")} {""}
+                      <small>({persentage}%)</small>
                     </span>
                   </div>
                 </div>
-                <p className="text-sm mt-6 max-w-2xl">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Autem, error ipsum nobis illo distinctio nostrum repudiandae
-                  libero. Eaque iure, expedita ex molestias odio, id sint
-                  tenetur eos dolores similique quam! You can find{" "}
-                  <a href="#" className="underline font-semibold">
-                    privacy policy
-                  </a>{" "}
-                  and{" "}
-                  <a href="#" className="underline font-semibold">
-                    terms of service
-                  </a>{" "}
-                  here.
-                </p>
               </CardContent>
               <CardFooter className="border-t py-3">
                 <div className="md:flex md:space-x-2 w-full">
-                  <Link
-                    className={cn(
-                      buttonVariants({ size: "sm" }),
-                      "w-full md:w-auto"
-                    )}
-                    to={RoutePath.subscriptions_settings}
-                  >
-                    {t("settings.change_plan")}
-                  </Link>
-
-                  <Button
-                    className="w-full md:w-auto"
-                    variant="ghost"
-                    size="sm"
-                  >
-                    {t("settings.cancel_plan")}
-                  </Button>
+                  {subscription?.freeTrial ? (
+                    <Link
+                      className={cn(
+                        buttonVariants({ size: "sm" }),
+                        "w-full md:w-auto"
+                      )}
+                      to={RoutePath.subscriptions_settings}
+                    >
+                      {t("settings.change_plan")}
+                    </Link>
+                  ) : (
+                    <Button
+                      className="w-full md:w-auto"
+                      variant="ghost"
+                      size="sm"
+                    >
+                      {t("settings.cancel_plan")}
+                    </Button>
+                  )}
                 </div>
               </CardFooter>
             </Card>

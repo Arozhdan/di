@@ -25,7 +25,11 @@ export const fetchHistory = createAsyncThunk<
   async (_, thunkApi) => {
     const { extra, rejectWithValue } = thunkApi;
     try {
-      const response = await extra.api.get<FetchHistoryResponse>("/history");
+      const response = await extra.api.get<FetchHistoryResponse>("/history", {
+        params: {
+          limit: 500,
+        },
+      });
 
       if (!response.data.totalDocs || !response.data.docs) {
         throw new Error()

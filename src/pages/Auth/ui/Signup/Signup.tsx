@@ -53,8 +53,9 @@ const Signup = () => {
   useEffect(() => {
     if (token) {
       dispatch(verifyEmail(token));
+      navigate(RoutePath.signin);
     }
-  }, [dispatch, token]);
+  }, [dispatch, navigate, token]);
 
   const [passwordType, setPasswordType] = useState<"password" | "text">(
     "password"

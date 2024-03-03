@@ -25,6 +25,8 @@ export interface User {
   logs?: Logs[]
   monthlyUsage?: number
   totalUsage?: number
+  totalQueries?: number
+  monthlyQueries?: number
 
 }
 

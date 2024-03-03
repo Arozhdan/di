@@ -36,7 +36,7 @@ const Subscriptions = () => {
       <Typography className="text-gray-500 border-b pb-4">
         {t("settings.subs_desc")}
       </Typography>
-      <div className="mt-6 space-y-4 xl:space-y-0 xl:grid grid-cols-3 gap-4">
+      <div className="mt-6 space-y-4 xl:space-y-0 xl:grid grid-cols-2 2xl:grid-cols-3 gap-4">
         {subsciptions.map((item) => (
           <Card
             className={cn("hover:border-primary", {

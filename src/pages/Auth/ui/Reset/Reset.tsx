@@ -15,75 +15,69 @@ import { Input } from "@/shared/components/ui/input";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
-import { LOCAL_STORAGE } from "@/shared/lib/consts";
 import { EyeIcon } from "lucide-react";
-import {
-  forgotPassword,
-  selectLocalAuthError,
-  signinLocal,
-} from "@/features/AuthLocal";
 import { useSelector } from "react-redux";
-import { selectIsLocalSigninLoading } from "@/features/AuthLocal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { selectAuthenticated } from "@/entities/User";
 import { useTranslation } from "react-i18next";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/components/ui/dialog";
-import { Label } from "@/shared/components/ui/label";
+  resetPassword,
+  selectIsLocalSigninLoading,
+} from "@/features/AuthLocal";
+import { RoutePath } from "@/app/providers/Router";
 
 const formSchema = z.object({
-  email: z.string().email(),
   password: z.string().min(6, {
+    message: "Password must be at least 6 characters",
+  }),
+  repeatPassword: z.string().min(6, {
     message: "Password must be at least 6 characters",
   }),
 });
 
-const Signin = () => {
+const Reset = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const authenticated = useSelector(selectAuthenticated);
   const isLocalLoading = useSelector(selectIsLocalSigninLoading);
   const navigate = useNavigate();
-  const error = useSelector(selectLocalAuthError);
+  const location = useLocation();
+  const token = new URLSearchParams(location.search).get("token");
   useEffect(() => {
     if (authenticated) {
       navigate("/");
     }
-  }, [authenticated, navigate]);
+    if (!token) {
+      navigate(RoutePath.signin);
+    }
+  }, [authenticated, navigate, token]);
 
   const [passwordType, setPasswordType] = useState<"password" | "text">(
     "password"
   );
-  const [resetEmail, setResetEmail] = useState<string>("");
-  const resetPassword = () => {
-    dispatch(forgotPassword(resetEmail));
-  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
       password: "",
+      repeatPassword: "",
     },
   });
 
-  useEffect(() => {
-    const email = localStorage.getItem(LOCAL_STORAGE.SIGNIN_EMAIL);
-    if (email) {
-      form.setValue("email", email);
-    }
-  }, [form]);
-
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    localStorage.setItem(LOCAL_STORAGE.SIGNIN_EMAIL, data.email);
-    dispatch(signinLocal(data));
+    if (data.password !== data.repeatPassword) {
+      form.setError("repeatPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      return;
+    }
+    dispatch(
+      resetPassword({
+        password: data.password,
+        token: token as string,
+      })
+    );
   };
 
   return (
@@ -118,12 +112,12 @@ const Signin = () => {
       <div className="min-h-screen flex flex-col justify-center items-center py-6 px-4 lg:px-10">
         <div>
           <Typography variant="sectionTitle" className="text-center">
-            {t("auth.signin.title")}
+            {t("auth.reset.title")}
           </Typography>
           <p className="max-w-md text-center mt-3 text-gray-500">
-            {t("auth.signin.subtitle")}
+            {t("auth.reset.subtitle")}
             <Link
-              to="/signup"
+              to={RoutePath.signin}
               className={cn(
                 buttonVariants({
                   variant: "link",
@@ -131,7 +125,7 @@ const Signin = () => {
                 "underline px-1"
               )}
             >
-              {t("auth.signin.signup")}
+              {t("auth.reset.signin")}
             </Link>
           </p>
           <Form {...form}>
@@ -144,39 +138,18 @@ const Signin = () => {
               }}
               className="spy-4 my-6 max-w-md"
             >
-              {error && (
-                <div className="text-primary text-sm mb-2">{error}</div>
-              )}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="sr-only">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="example@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="sr-only">
-                      {t("auth.password")}
+                      {t("auth.reset.newPassword")}
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
-                          placeholder={t("auth.password")}
+                          placeholder={t("auth.reset.newPassword")}
                           type={passwordType}
                           {...field}
                         />
@@ -198,81 +171,35 @@ const Signin = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="repeatPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="sr-only">
+                      {t("auth.reset.repeatPassword")}
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          placeholder={t("auth.reset.repeatPassword")}
+                          type={passwordType}
+                          {...field}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button
                 type="submit"
                 className="w-full mt-2"
                 loading={isLocalLoading}
               >
-                {t("auth.signin.submit")}
+                {t("general.submit")}
               </Button>
             </form>
-            <div className="relative flex justify-center w-full max-w-md mb-6">
-              <div className="text-gray-500 relative z-10 bg-background px-4 uppercase text-xs">
-                {t("auth.signin.or")}
-              </div>
-              <div className="absolute w-full h-px bg-accent top-1/2" />
-            </div>
-            <div className="max-w-md space-x-3 flex">
-              <Button className="w-full" variant="outline" disabled>
-                <img
-                  className="w-5 h-5 mr-1"
-                  src="/google-icon.png"
-                  alt="Google"
-                />
-                Google
-              </Button>
-              <Button className="w-full" variant="outline" disabled>
-                <img
-                  className="w-5 h-5 mr-1"
-                  src="/facebook-icon.svg"
-                  alt="Google"
-                />
-                Facebook
-              </Button>
-            </div>
-            <div className="max-w-md text-center mt-6 px-10 text-gray-500">
-              {t("auth.signin.forgot")}
-              <Dialog>
-                <DialogTrigger
-                  className={cn(
-                    buttonVariants({
-                      variant: "link",
-                    }),
-                    "underline px-1"
-                  )}
-                >
-                  {t("auth.signin.forgotLink")}
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>{t("auth.signin.forgot")}</DialogTitle>
-                  </DialogHeader>
-                  <div>
-                    <Label>
-                      <span className="inline-block mb-4">
-                        {t("auth.signin.forgotLabel")}
-                      </span>
-                      <Input
-                        type="email"
-                        placeholder="example@email.com"
-                        value={resetEmail}
-                        onChange={(e) => setResetEmail(e.target.value)}
-                      />
-                    </Label>
-                  </div>
-                  <DialogFooter>
-                    <DialogClose className="ml-2">
-                      <Button onClick={resetPassword}>
-                        {t("general.submit")}
-                      </Button>
-                    </DialogClose>
-                    <DialogClose className="ml-2">
-                      {t("general.cancel")}
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
           </Form>
         </div>
       </div>
@@ -280,4 +207,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Reset;

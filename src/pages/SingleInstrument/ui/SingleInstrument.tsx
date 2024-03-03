@@ -32,7 +32,7 @@ import {
 import { Navbar } from "@/widgets/Navbar";
 import { ArrowLeftIcon, BotIcon, PinIcon, StarIcon } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { RoutePath } from "@/app/providers/Router";
 import {
   Form,
@@ -43,7 +43,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/components/ui/form";
-import { cn, useAppDispatch } from "@/shared/lib/utils";
+import { cn, useAppDispatch, useMediaQuery } from "@/shared/lib/utils";
 import { useSelector } from "react-redux";
 import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
 import {
@@ -82,6 +82,7 @@ const SingleInstrument = () => {
   const isWindows =
     navigator.platform.indexOf("Win") > -1 ||
     navigator.platform.indexOf("win") > -1;
+  const isMobile = useMediaQuery("(max-width: 1024px)");
 
   const drawerTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -113,6 +114,8 @@ const SingleInstrument = () => {
   const history = useSelector((state: StateSchema) =>
     selectHistoryByInstrument(state, instrumentId)
   );
+  const historyLength = history.length;
+
   const generating = useSelector(isGenerating);
 
   const historyToRender = useCallback(() => {
@@ -121,6 +124,12 @@ const SingleInstrument = () => {
     }
     return history;
   }, [history, pinnedOnly])();
+
+  useEffect(() => {
+    if (isMobile && drawerTriggerRef.current) {
+      drawerTriggerRef.current.click();
+    }
+  }, [isMobile, historyLength]);
 
   if (isInstrumentLoading) return <PageLoader />;
   if (!instrument) return null;

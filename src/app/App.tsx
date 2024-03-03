@@ -12,6 +12,7 @@ import { fetchInstruments } from "@/entities/Instrument";
 import { fetchSiteSettings } from "@/entities/SiteSettings";
 import { fetchHistory } from "@/entities/History";
 import { useTranslation } from "react-i18next";
+import { fetchSubscription } from "@/entities/Subscription/model/services/fetchSubscription.service";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -21,15 +22,22 @@ function App() {
   const path = useLocation().pathname;
   const { i18n } = useTranslation();
 
+  const anonymousPaths = [
+    RoutePath.signup,
+    RoutePath.signin,
+    RoutePath.reset_password,
+  ];
+
   useEffect(() => {
     dispatch(initAuth());
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isAuthenticated && inited && path !== RoutePath.signup) {
+    if (!isAuthenticated && !anonymousPaths.includes(path)) {
       navigate(RoutePath.signin);
     }
     if (isAuthenticated && inited) {
+      dispatch(fetchSubscription());
       dispatch(fetchInstruments());
       dispatch(fetchSiteSettings());
       dispatch(fetchHistory());

@@ -13,6 +13,7 @@ import { historyReducer } from "@/entities/History"
 import { chatReducer } from "@/pages/Chat"
 import i18next from "i18next"
 import { authLocalReducer } from "@/features/AuthLocal"
+import { subscriptionReducer } from "@/entities/Subscription"
 
 
 
@@ -31,7 +32,8 @@ export function createReduxStore(
     instrument: instrumentReducer,
     siteSettings: siteSettingsReducer,
     history: historyReducer,
-    chat: chatReducer
+    chat: chatReducer,
+    subscription: subscriptionReducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)

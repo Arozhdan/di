@@ -3,6 +3,8 @@ export { signinLocal } from './model/services/singin-local.service'
 export { signupLocal } from './model/services/signup-local.service'
 export { signout } from './model/services/sign-out.service'
 export { verifyEmail } from './model/services/verify.service'
+export { forgotPassword } from './model/services/forgot-password.service'
+export { resetPassword } from './model/services/reset-password.service'
 
 export { selectIsLocalSigninLoading } from './model/selectors/selectIsLocalSigninLoading/selectIsLocalSigninLoading'
 export { selectLocalAuthError } from './model/selectors/selectLocalSigninError/selectLocalAuthError'

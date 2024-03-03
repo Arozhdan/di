@@ -27,6 +27,7 @@ export const fetchInstruments = createAsyncThunk<
     const response = await extra.api.get<InstrumentsResponse>("/instruments", {
       params: {
         locale,
+        limit: 500,
       },
     });
 
