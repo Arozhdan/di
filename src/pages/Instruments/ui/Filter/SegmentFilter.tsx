@@ -1,5 +1,4 @@
 import {
-  InstrumentType,
   instrumentActions,
   selectInstrumentFilters,
   selectInstrumentTypes,
@@ -49,7 +48,7 @@ const Filter: FC<Props> = ({ className }) => {
       dispatch(
         instrumentActions.setFilter({
           key: "types",
-          value: segment.toLowerCase().split(",") as InstrumentType[],
+          value: segment.toLowerCase().split(","),
         })
       );
     }
@@ -84,10 +83,7 @@ const Filter: FC<Props> = ({ className }) => {
                   </Badge>
                 ) : (
                   options
-                    .filter(
-                      (option) =>
-                        types.indexOf(option.value as InstrumentType) > -1
-                    )
+                    .filter((option) => types.indexOf(option.value) > -1)
                     .map((option) => (
                       <Badge
                         key={option.value}
@@ -110,8 +106,7 @@ const Filter: FC<Props> = ({ className }) => {
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
-                const isSelected =
-                  types.indexOf(option.value as InstrumentType) > -1;
+                const isSelected = types.indexOf(option.value) > -1;
                 return (
                   <CommandItem
                     key={option.value}

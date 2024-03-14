@@ -1,7 +1,6 @@
 export { default as InstrumentCard } from './ui/InstrumentCard/InstrumentCard';
 export { default as InstrumentCardSkeleton } from './ui/InstrumentCard/InstrumentCardSkeleton';
 export type { InstrumentSchema, InstrumentFilters } from './model/types/instrument.schema';
-export type { InstrumentType } from './model/types/instrument.interface';
 export type { Instrument } from './model/types/instrument.interface';
 
 export { fetchInstruments } from './model/services/fetchInstruments/fetchInstruments.service';
