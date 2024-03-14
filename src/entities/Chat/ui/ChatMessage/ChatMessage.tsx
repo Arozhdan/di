@@ -9,6 +9,10 @@ interface Props {
 }
 
 export const ChatMessage: FC<Props> = ({ message, loading }) => {
+  const boldRegex = /\*\*(.*?)\*\*/g;
+  const serializedMessage = message.content
+    .replace(/(?:\r\n|\r|\n)/g, "<br />")
+    .replace(boldRegex, "<strong>$1</strong>");
   return (
     <div
       className={cn("grid lg:grid-cols-12 gap-4 items-start", {
@@ -29,9 +33,10 @@ export const ChatMessage: FC<Props> = ({ message, loading }) => {
           )}
         </div>
       </div>
-      <div className="col-span-11 bg-accent rounded-xl p-4">
-        {message.content}
-      </div>
+      <div
+        dangerouslySetInnerHTML={{ __html: serializedMessage }}
+        className="col-span-11 bg-accent rounded-xl p-4 prose prose-sm dark:prose-invert"
+      />
     </div>
   );
 };

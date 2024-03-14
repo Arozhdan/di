@@ -7,13 +7,14 @@
     "templates": "Templates",
     "settings": "Settings",
     "chatPRO": "Chat PRO",
-    "language": "Langauge",
+    "language": "Language",
     "theme": "Theme",
     "search": "Search",
     "info": "Info",
-    "view_all": "See all",
+    "view_all": "View all",
     "expand": "Expand",
     "collapse": "Collapse",
+    "edit": "Edit",
     "profile": "Profile",
     "appearance": "Appearance",
     "notifications": "Notifications",
@@ -50,17 +51,26 @@
     "overview": "Overview",
     "fav_instruments": "Favourite tools",
     "recently_used": "Recently used",
-    "no_fav_yet": "No favorite tools yet",
+    "no_fav_yet": "No favourite tools yet",
     "over_amt_hours": "Over {{hours}} hours"
   },
-  "instrument": {
-    "add_to_fav": "Add to favorites",
-    "remove_from_fav": "Remove from favorites",
-    "only_fav": "Only favorites",
+  "tool": {
+    "add_to_fav": "Add to favourites",
+    "remove_from_fav": "Remove from favourites",
+    "only_fav": "Only favourites",
     "context_length": "The text for generation must contain between 10 and 400 characters",
     "generate": "Generate",
     "instrument_subtitle": "Our custom prompts for solving a variety of business and marketing challenges",
     "category": "Category"
+  },
+  "categories": {
+    "sales": "Sales",
+    "marketing": "Marketing",
+    "social": "Social media",
+    "simple": "Simple tools",
+    "business": "Business",
+    "branding": "Branding",
+    "advertising": "Advertising"
   },
   "history": {
     "history_subtitle": "History of queries and tools used",
@@ -75,7 +85,7 @@
   },
   "settings": {
     "back_to_dashboard": "Back to dashboard",
-    "settings_subtitle": "Customize the appearance of the app, notifications and billing settings",
+    "settings_subtitle": "Customise the appearance of the app, notifications and billing settings",
     "profile_subtitle": "Manage your profile information",
     "username": "Username",
     "username_desc": "This is the name that will be displayed on your profile",
@@ -118,7 +128,7 @@
     "amount": "Amount",
     "list_of_recent_invoices": "A list of your recent invoices",
     "subs_desc": "Select a plan that works best for you",
-    "recommended": "Recommended",
+    "recommended": "Most popular choice",
     "subscribe": "Subscribe now",
     "change_plan": "Get subscription",
     "cancel_plan": "Cancel subscription",
@@ -132,9 +142,19 @@
     "delete_all_chats": "Delete all chats",
     "enter_message": "Enter your message",
     "profesional": "Profesional",
-    "polite": "Polite",
-    "neutral": "Neutral",
-    "positive": "Positive"
+    "casual": "Casual",
+    "positive": "Positive",
+    "witty": "Witty",
+    "funny": "Funny",
+    "inspiring": "Inspiring"
+  },
+  "popups": {
+    "removeFromFav": "An item has been removed from favourites",
+    "addToFav": "New item has been added to favourites",
+    "pin_success": "has been successfully pinned",
+    "unpin_success": "has been successfully unpinned",
+    "copy_text_success": "The text has been successfully copied",
+    "recorddelete": "Record has been deleted"
   },
   "auth": {
     "signin": {
@@ -170,7 +190,7 @@
     },
     "reset": {
       "title": "Reset your password",
-      "subtitle": "You can reset you passwor using this page.",
+      "subtitle": "You can reset you password using this page",
       "signin": "Back to sign in page.",
       "newPassword": "New password",
       "repeatPassword": "Confirm password"
@@ -179,7 +199,7 @@
       "error": "Something went wrong :(",
       "errorDescription": "Password has not been updated.",
       "successAction": "Sign in",
-      "success": "Password has successfilly been updated!",
+      "success": "Password has been successfully updated!",
       "successDescription": "Now you can safely sign in"
     }
   }

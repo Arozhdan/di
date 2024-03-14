@@ -126,6 +126,21 @@ const SingleInstrument = () => {
   }, [history, pinnedOnly])();
 
   useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+    return () => {
+      document.removeEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+          form.handleSubmit(onSubmit)();
+        }
+      });
+    };
+  }, [form, onSubmit]);
+
+  useEffect(() => {
     if (isMobile && drawerTriggerRef.current) {
       drawerTriggerRef.current.click();
     }
@@ -210,7 +225,9 @@ const SingleInstrument = () => {
                   name="input"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ваш текст</FormLabel>
+                      <FormLabel>
+                        {instrument.help || "Введите текст"}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           onChange={field.onChange}

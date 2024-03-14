@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@components/card";
 import { FC, memo } from "react";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
 import styles from "./InstrumentCard.module.css";
-import { StarIcon, StarOffIcon } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Link, useNavigate } from "react-router-dom";
 import { RoutePath } from "@/app/providers/Router";
@@ -64,7 +64,11 @@ const InstrumentCard: FC<Props> = ({ instrument, className, ...props }) => {
               </div>
             </TooltipTrigger>
             <button className={styles.history} onClick={handleFavoriteClick}>
-              {isFavorited ? <StarOffIcon size={16} /> : <StarIcon size={16} />}
+              {isFavorited ? (
+                <StarIcon className="fill-current" size={16} />
+              ) : (
+                <StarIcon size={16} />
+              )}
             </button>
           </div>
           <Link

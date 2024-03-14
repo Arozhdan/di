@@ -61,13 +61,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
     typeof subAllowance === "string"
       ? 0
       : Math.ceil((user?.monthlyQueries || 0) / subAllowance);
-
-  const username =
-    user.firstName && user.lastName
-      ? user.firstName + " " + user.lastName
-        ? user.firstName
-        : user.email
-      : user.email;
+  const username = user.username || user.email;
 
   const classes = cn(styles.sidebar, className, {
     [styles.collapsed]: isCollapsed,

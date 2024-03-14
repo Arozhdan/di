@@ -5,6 +5,7 @@ export type InstrumentType = 'business' | 'social' | 'custom' | 'other';
 export interface Instrument {
   id: string;
   name: string;
+  help?: string;
   intro: string;
   description: string;
   example: string;
