@@ -80,7 +80,7 @@ const Filter: FC<Props> = ({ className }) => {
                     variant="secondary"
                     className="rounded-sm px-1 font-normal capitalize"
                   >
-                    {types?.length} selected
+                    {types?.length} {t("general.selected")}
                   </Badge>
                 ) : (
                   options
@@ -94,7 +94,7 @@ const Filter: FC<Props> = ({ className }) => {
                         variant="secondary"
                         className="rounded-sm px-1 font-normal capitalize"
                       >
-                        {option.label}
+                        {t(`categories.${option.value}`)}
                       </Badge>
                     ))
                 )}
@@ -144,7 +144,9 @@ const Filter: FC<Props> = ({ className }) => {
                       <CheckIcon className={cn("h-4 w-4")} />
                     </div>
 
-                    <span className="capitalize">{option.label}</span>
+                    <span className="capitalize">
+                      {t(`categories.${option.value}`)}
+                    </span>
                   </CommandItem>
                 );
               })}

@@ -57,6 +57,7 @@ import {
 } from "@/entities/Instrument";
 import { PageLoader } from "@/widgets/Loader";
 import { selectHistoryByInstrument } from "@/entities/History/model/selectors/selectHistoryByInstrument/selectHistoryByInstrument";
+import { useTranslation } from "react-i18next";
 
 const formSchema = z.object({
   input: z
@@ -64,7 +65,14 @@ const formSchema = z.object({
     .min(10, "Минимум 10 символов")
     .max(400, "Максимум 400 символов"),
   language: z.enum(["russian", "english"]),
-  tov: z.enum(["professional", "polite", "neutral", "rude"]),
+  tov: z.enum([
+    "professional",
+    "casual",
+    "positive",
+    "witty",
+    "inspiring",
+    "funny",
+  ]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -76,6 +84,7 @@ const defaultValues: FormValues = {
 };
 
 const SingleInstrument = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [pinnedOnly, setPinnedOnly] = useState(false);
   const isInstrumentLoading = useSelector(selectIsInstrumentsListLoading);
@@ -94,17 +103,20 @@ const SingleInstrument = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (values: FormValues) => {
-    if (!instrumentId) return;
-    dispatch(
-      generateQuery({
-        input: values.input,
-        instrumentId: instrumentId,
-        language: values.language,
-        tov: values.tov,
-      })
-    );
-  };
+  const onSubmit = useCallback(
+    (values: FormValues) => {
+      if (!instrumentId) return;
+      dispatch(
+        generateQuery({
+          input: values.input,
+          instrumentId: instrumentId,
+          language: values.language,
+          tov: values.tov,
+        })
+      );
+    },
+    [dispatch, instrumentId]
+  );
   const instrument = useSelector((state: StateSchema) =>
     selectInstrumentById(state, instrumentId)
   );
@@ -237,8 +249,7 @@ const SingleInstrument = () => {
                         />
                       </FormControl>
                       <FormDescription>
-                        Контекст для генерации результата, должен быть не менее
-                        10 символов и не более 400 символов
+                        {t("instrument.context_length")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -252,7 +263,7 @@ const SingleInstrument = () => {
                   disabled={generating}
                 >
                   <BotIcon size={14} className="mr-2" />
-                  Сгенерировать
+                  {t("instrument.generate")}
                   {isWindows ? (
                     <kbd className="ml-1 text-xs hidden lg:inline">
                       (Ctrl + Enter)
@@ -273,8 +284,8 @@ const SingleInstrument = () => {
                     <SelectValue placeholder="Язык" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="russian">Русский</SelectItem>
-                    <SelectItem value="english">Английский</SelectItem>
+                    <SelectItem value="russian">{t("general.ru")}</SelectItem>
+                    <SelectItem value="english">{t("general.en")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select
@@ -282,7 +293,13 @@ const SingleInstrument = () => {
                   onValueChange={(value) => {
                     form.setValue(
                       "tov",
-                      value as "professional" | "polite" | "neutral" | "rude"
+                      value as
+                        | "professional"
+                        | "casual"
+                        | "positive"
+                        | "witty"
+                        | "inspiring"
+                        | "funny"
                     );
                   }}
                 >
@@ -291,24 +308,30 @@ const SingleInstrument = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="professional">
-                      Профессиональный
+                      {t("chat.professional")}
                     </SelectItem>
-                    <SelectItem value="polite">Вежливый</SelectItem>
-                    <SelectItem value="neutral">Нейтральный</SelectItem>
-                    <SelectItem value="rude">Грубый</SelectItem>
+                    <SelectItem value="casual">{t("chat.casual")}</SelectItem>
+                    <SelectItem value="positive">
+                      {t("chat.positive")}
+                    </SelectItem>
+                    <SelectItem value="witty">{t("chat.witty")}</SelectItem>
+                    <SelectItem value="inspiring">
+                      {t("chat.inspiring")}
+                    </SelectItem>
+                    <SelectItem value="funny">{t("chat.funny")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Drawer>
                   <DrawerTrigger className="lg:hidden" ref={drawerTriggerRef}>
                     <Button variant="outline" className="w-full" type="button">
-                      История
+                      {t("general.history")}
                     </Button>
                   </DrawerTrigger>
                   <DrawerContent>
                     <DrawerHeader>
                       <DrawerTitle>
                         <Typography variant="sectionSubtitle">
-                          История
+                          {t("general.history")}
                         </Typography>
                       </DrawerTitle>
                       <Toggle
@@ -319,7 +342,7 @@ const SingleInstrument = () => {
                         className="flex mt-2 mb-4"
                       >
                         <PinIcon size={14} className="mr-2" />
-                        Только закрепленные
+                        {t("history.only_pinned")}
                       </Toggle>
                       <DrawerDescription asChild>
                         <ScrollArea className="h-[60vh] text-left">
@@ -333,10 +356,12 @@ const SingleInstrument = () => {
                     </DrawerHeader>
                     <DrawerFooter>
                       <div className="flex justify-between space-x-4">
-                        <Button className="w-full">Смотреть все</Button>
+                        <Button className="w-full">
+                          {t("general.view_all")}
+                        </Button>
                         <DrawerClose className="w-full">
                           <Button className="w-full" variant="outline">
-                            Закрыть
+                            {t("general.cancel")}
                           </Button>
                         </DrawerClose>
                       </div>
@@ -348,7 +373,9 @@ const SingleInstrument = () => {
           </Form>
           <div className="col-span-2 hidden lg:block">
             <ScrollArea className="h-[calc(100vh-5rem)]">
-              <Typography variant="sectionSubtitle">История</Typography>
+              <Typography variant="sectionSubtitle">
+                {t("general.history")}
+              </Typography>
               <div className="flex space-x-4 items-center mt-2 mb-4">
                 <Toggle
                   variant="outline"
@@ -358,7 +385,7 @@ const SingleInstrument = () => {
                   onPressedChange={setPinnedOnly}
                 >
                   <PinIcon size={14} className="mr-2" />
-                  Только закрепленные
+                  {t("history.only_pinned")}
                 </Toggle>
                 <Link
                   className={buttonVariants({
@@ -367,7 +394,7 @@ const SingleInstrument = () => {
                   })}
                   to={RoutePath.history + "?instrument=" + instrumentId}
                 >
-                  Смотреть все
+                  {t("general.view_all")}
                 </Link>
               </div>
               {historyToRender.length > 0 ? (
@@ -377,7 +404,9 @@ const SingleInstrument = () => {
                   ))}
                 </div>
               ) : (
-                <Typography className="text-gray-500">История пуста</Typography>
+                <Typography className="text-gray-500">
+                  {t("general.no_results")}
+                </Typography>
               )}
             </ScrollArea>
           </div>

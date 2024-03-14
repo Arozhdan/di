@@ -37,7 +37,8 @@
     "type_command_or_search": "Начните печатать для команды или поиска",
     "navigation": "Навигация",
     "cancel": "Отменить",
-    "submit": "Подтвердить"
+    "submit": "Подтвердить",
+    "selected": "Выбрано"
   },
   "dashboard": {
     "most_used_instrument": "Самый используемый инструмент",
@@ -54,7 +55,7 @@
     "no_fav_yet": "Избранных инструментов пока нет",
     "over_amt_hours": "Более {{hours}} часов"
   },
-  "tool": {
+  "instrument": {
     "add_to_fav": "Добавить в избранное",
     "remove_from_fav": "Удалить из избранного",
     "only_fav": "Только избранные",

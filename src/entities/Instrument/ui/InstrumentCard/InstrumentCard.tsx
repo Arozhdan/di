@@ -16,6 +16,7 @@ import {
 } from "../..";
 import { useSelector } from "react-redux";
 import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
+import { useTranslation } from "react-i18next";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -23,6 +24,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const InstrumentCard: FC<Props> = ({ instrument, className, ...props }) => {
+  const { t } = useTranslation();
   const classes = cn(styles.card, className);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -84,7 +86,7 @@ const InstrumentCard: FC<Props> = ({ instrument, className, ...props }) => {
               );
             }}
           >
-            {instrument.instrumentType}
+            {t(`categories.${instrument.instrumentType}`)}
           </Link>
         </CardHeader>
         <CardContent>

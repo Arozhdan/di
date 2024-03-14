@@ -1,6 +1,5 @@
 import { User } from "@/entities/User";
 
-export type InstrumentType = 'business' | 'social' | 'custom' | 'other';
 
 export interface Instrument {
   id: string;
@@ -12,7 +11,7 @@ export interface Instrument {
   prompt: string;
   createdAt: string;
   updatedAt: string;
-  instrumentType: InstrumentType;
+  instrumentType: string;
   owner?: User;
   timesUsed?: number;
 }

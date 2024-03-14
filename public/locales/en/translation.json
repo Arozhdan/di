@@ -37,7 +37,8 @@
     "type_command_or_search": "Type a command or search",
     "navigation": "Navigation",
     "cancel": "Cancel",
-    "submit": "Submit"
+    "submit": "Submit",
+    "selected": "Selected"
   },
   "dashboard": {
     "most_used_instrument": "Most used tool",
@@ -54,7 +55,7 @@
     "no_fav_yet": "No favourite tools yet",
     "over_amt_hours": "Over {{hours}} hours"
   },
-  "tool": {
+  "instrument": {
     "add_to_fav": "Add to favourites",
     "remove_from_fav": "Remove from favourites",
     "only_fav": "Only favourites",
@@ -141,7 +142,7 @@
     "create_new_chat": "Create new chat",
     "delete_all_chats": "Delete all chats",
     "enter_message": "Enter your message",
-    "profesional": "Profesional",
+    "professional": "Profesional",
     "casual": "Casual",
     "positive": "Positive",
     "witty": "Witty",
