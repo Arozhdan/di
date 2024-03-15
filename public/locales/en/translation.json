@@ -14,7 +14,6 @@
     "view_all": "View all",
     "expand": "Expand",
     "collapse": "Collapse",
-    "edit": "Edit",
     "profile": "Profile",
     "appearance": "Appearance",
     "notifications": "Notifications",
@@ -38,7 +37,11 @@
     "navigation": "Navigation",
     "cancel": "Cancel",
     "submit": "Submit",
-    "selected": "Selected"
+    "selected": "Selected",
+    "save": "Save",
+    "edit": "Edit",
+    "close": "Close",
+    "apply": "Apply"
   },
   "dashboard": {
     "most_used_instrument": "Most used tool",
@@ -77,7 +80,16 @@
     "history_subtitle": "History of queries and tools used",
     "search_by_tool": "Search by tool",
     "no_history": "No history yet",
-    "only_pinned": "Only pinned"
+    "only_pinned": "Only pinned",
+    "unpin": "Remove from pinned",
+    "pin": "Pin record",
+    "shorten": "Make shorter",
+    "rewrite": "Rewrite",
+    "custom": "Custom action",
+    "regen": "Start over",
+    "custom_command": "Action",
+    "custom_command_description": "Describe action you want to execture on the text result",
+    "custom_command_placeholder": "Ex: Rewrite in Czech"
   },
   "templates": {
     "template_subtitle": "Here you can create your own templates for tools",

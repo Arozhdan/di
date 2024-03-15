@@ -176,7 +176,7 @@ const SingleInstrument = () => {
             to={RoutePath.instruments}
           >
             <ArrowLeftIcon size={12} className="mr-1 mt-0.5" />
-            Инструменты
+            {t("general.instruments")}
           </Link>
         </div>
       </Navbar>
@@ -207,7 +207,9 @@ const SingleInstrument = () => {
                     }}
                   >
                     <StarIcon size={14} className="mr-2" />
-                    {isFavorited ? "В избранном" : "Добавить в избранное"}
+                    {isFavorited
+                      ? t("instrument.add_to_fav")
+                      : t("instrument.remove_from_fav")}
                   </Toggle>
                 </div>
                 <Tooltip>
@@ -228,7 +230,7 @@ const SingleInstrument = () => {
                   }
                   className="underline text-xs block capitalize"
                 >
-                  {instrument.instrumentType}
+                  {t("categories." + instrument.instrumentType)}
                 </Link>
               </div>
               <div className="mt-2 lg:mt-6 flex-grow pb-2 lg:pb-8">

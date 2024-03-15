@@ -55,8 +55,10 @@ import { useSelector } from "react-redux";
 import { StateSchema } from "@/app/providers/StoreProvider/config/state.schema";
 import { selectHistoryByInstrument } from "@/entities/History/model/selectors/selectHistoryByInstrument/selectHistoryByInstrument";
 import { PageLoader } from "@/widgets/Loader";
+import { useTranslation } from "react-i18next";
 
 const Query = () => {
+  const { t } = useTranslation();
   const [isCustomCommandOpen, setIsCustomCommandOpen] = useState(false);
   const [touched, setTouched] = useState(false);
   const [customCommand, setCustomCommand] = useState<string>("");
@@ -173,7 +175,7 @@ const Query = () => {
             to={RoutePath.history}
           >
             <ArrowLeftIcon size={12} className="mr-1 mt-0.5" />
-            История
+            {t("general.history")}
           </Link>
         </div>
       </Navbar>
@@ -194,7 +196,7 @@ const Query = () => {
                   }}
                 >
                   <PinIcon size={14} className="mr-2" />
-                  {data.isPinned ? "Открепить" : "Закрепить"}
+                  {data.isPinned ? t("history.unpin") : t("history.pin")}
                 </Toggle>
               </div>
             </div>
@@ -221,31 +223,37 @@ const Query = () => {
                 disabled={isUpdating || !touched || isRegenerating}
               >
                 <SaveIcon size={14} className="mr-2" />
-                Сохранить изменения
+                {t("general.save")}
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant={"outline"} className="lg:ml-4" type="submit">
                     <PencilRulerIcon size={14} className="mr-2" />
-                    Редактировать
+                    {t("general.edit")}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Редактировать</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    <Typography variant="sectionSubtitle">
+                      {t("general.edit")}
+                    </Typography>
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => handleEdit("Make shorter")}>
                     <ArrowDownWideNarrowIcon size={12} className="mr-4" />
-                    Сделать короче
+
+                    {t("history.shorten")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleEdit("Rewrite")}>
                     <RotateCcwIcon size={12} className="mr-4" />
-                    Переписать
+
+                    {t("history.rewrite")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setIsCustomCommandOpen(true)}
                   >
                     <PenLineIcon size={12} className="mr-4" />
-                    Свой вариант
+                    {t("history.custom")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -260,7 +268,7 @@ const Query = () => {
                 )}
               >
                 <RotateCcwIcon size={14} className="mr-2" />
-                Начать заново
+                {t("history.regen")}
               </Link>
             </div>
           </div>
@@ -275,7 +283,7 @@ const Query = () => {
                   onClick={() => setPinnedOnly((prev) => !prev)}
                 >
                   <PinIcon size={14} className="mr-2" />
-                  Только закрепленные
+                  {t("history.only_pinned")}
                 </Toggle>
                 <Link
                   className={buttonVariants({
@@ -284,7 +292,7 @@ const Query = () => {
                   })}
                   to={RoutePath.history + "?instrument=" + data.instrument.id}
                 >
-                  Смотреть все
+                  {t("general.view_all")}
                 </Link>
               </div>
               <div className="space-y-4 pr-6">
@@ -300,7 +308,7 @@ const Query = () => {
                   ))
                 ) : (
                   <Typography className="text-gray-500">
-                    История пуста
+                    {t("general.no_results")}
                   </Typography>
                 )}
               </div>
@@ -311,16 +319,16 @@ const Query = () => {
       <Dialog open={isCustomCommandOpen} onOpenChange={setIsCustomCommandOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Команда</DialogTitle>
+            <DialogTitle>{t("history.custom_command")}</DialogTitle>
             <DialogDescription>
-              Опишите команду, для редактирования результата
+              {t("history.custom_command_description")}
             </DialogDescription>
           </DialogHeader>
           <div>
             <Input
               value={customCommand}
               onChange={(e) => setCustomCommand(e.target.value)}
-              placeholder="Ex: Перепиши на английском языке"
+              placeholder={t("history.custom_command_placeholder")}
             />
           </div>
           <DialogFooter>
@@ -330,12 +338,12 @@ const Query = () => {
                 variant="ghost"
                 onClick={() => setIsCustomCommandOpen(false)}
               >
-                Close
+                {t("general.close")}
               </Button>
             </DialogClose>
             <Button type="submit" onClick={() => handleEdit()}>
               <BotIcon size={14} className="mr-2" />
-              Сгенерировать
+              {t("general.apply")}
             </Button>
           </DialogFooter>
         </DialogContent>

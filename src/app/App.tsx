@@ -33,7 +33,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isAuthenticated && !anonymousPaths.includes(path)) {
+    if (!isAuthenticated && !anonymousPaths.includes(path) && inited) {
       navigate(RoutePath.signin);
     }
     if (isAuthenticated && inited) {
