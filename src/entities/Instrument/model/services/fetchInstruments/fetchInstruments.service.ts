@@ -23,7 +23,10 @@ export const fetchInstruments = createAsyncThunk<
 >('instrument/fetch', async (_, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
-    const locale = extra.i18n.language;
+
+    console.log('language: ', extra.i18n.language);
+
+    const locale = extra.i18n.language.toLowerCase().includes('en') ? 'en' : 'ru';
     const response = await extra.api.get<InstrumentsResponse>("/instruments", {
       params: {
         locale,
