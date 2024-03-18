@@ -17,14 +17,18 @@ interface FetchSubscriptionResponse {
 
 export const fetchSubscription = createAsyncThunk<
   Subscription | null,
-  undefined,
+  string,
   ThunkConfig<string>
->('subscription/fetchSubscription', async (_, thunkApi) => {
+>('subscription/fetchSubscription', async (userId, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
-    const response = await extra.api.get<FetchSubscriptionResponse>('/subscriptions?depth=1', {
+    const response = await extra.api.get<FetchSubscriptionResponse>('/subscriptions', {
       params: {
+        depth: 1,
         limit: 1,
+        where: {
+          owner: { equals: userId }
+        }
       },
     });
 

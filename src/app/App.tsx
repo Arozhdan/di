@@ -13,11 +13,15 @@ import { fetchSiteSettings } from "@/entities/SiteSettings";
 import { fetchHistory } from "@/entities/History";
 import { useTranslation } from "react-i18next";
 import { fetchSubscription } from "@/entities/Subscription/model/services/fetchSubscription.service";
+import { StateSchema } from "./providers/StoreProvider/config/state.schema";
 
 function App() {
   const dispatch = useAppDispatch();
   const inited = useSelector(selectAuthInited);
   const isAuthenticated = useSelector(selectAuthenticated);
+  const userId = useSelector(
+    (state: StateSchema) => state.user.user?.id
+  ) as string;
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const { i18n } = useTranslation();
@@ -37,13 +41,13 @@ function App() {
       navigate(RoutePath.signin);
     }
     if (isAuthenticated && inited) {
-      dispatch(fetchSubscription());
+      dispatch(fetchSubscription(userId));
       dispatch(fetchInstruments());
       dispatch(fetchSiteSettings());
       dispatch(fetchHistory());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, inited, i18n.language]);
+  }, [isAuthenticated, inited, i18n.language, userId]);
 
   return <Suspense fallback="">{inited && <AppRouter />}</Suspense>;
 }

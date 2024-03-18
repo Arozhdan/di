@@ -60,7 +60,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
   const persentage =
     typeof subAllowance === "string"
       ? 0
-      : Math.ceil((user?.monthlyQueries || 0) / subAllowance);
+      : Math.ceil(((user?.monthlyQueries || 0) * 100) / subAllowance);
   const username = user.username || user.email;
 
   const classes = cn(styles.sidebar, className, {
@@ -299,7 +299,7 @@ const Sidebar: FC<Props> = ({ isCollapsed, className, links, ...props }) => {
                   <small className="text-xs">
                     ({user.monthlyQueries || 0} / {subAllowance})
                   </small>
-                  <Progress value={persentage || 1} className="h-2" />
+                  <Progress value={persentage} className="h-2" />
                   <Button
                     variant="link"
                     className="px-0"
