@@ -13,6 +13,7 @@ export const pinHistory = createAsyncThunk<
 >('instrument/favorite', async (history, thunkApi) => {
   const { extra, rejectWithValue, dispatch } = thunkApi;
   try {
+    const { i18n } = extra;
     const response = await extra.api.get("/history/" + history.id + "/pin");
 
     if (response.status !== 200) {
@@ -20,7 +21,7 @@ export const pinHistory = createAsyncThunk<
     }
 
     dispatch(historyActions.pinHistory(history))
-    toast('New history record has been pinned')
+    toast(i18n.t('popups.pin_success'));
   }
   catch (error) {
     console.log('Error fetching instruments: ', error);

@@ -12,6 +12,7 @@ export const unfavoriteInstrument = createAsyncThunk<
 >("instrument/unfavorite", async (instrument, thunkApi) => {
   const { extra, rejectWithValue, dispatch } = thunkApi;
   try {
+    const { i18n } = extra;
     const response = await extra.api.get(
       "/instruments/" + instrument.id + "/unlike"
     );
@@ -21,9 +22,9 @@ export const unfavoriteInstrument = createAsyncThunk<
     }
 
     dispatch(userActions.removeFromFavorites(instrument));
-    toast(`"${instrument.name}"` + " has been removed from favorites", {
+    toast(i18n.t('popups.removeFromFav'), {
       action: {
-        label: "Undo",
+        label: i18n.t('general.undo'),
         onClick: () => {
           dispatch(favoriteInstrument(instrument));
         },

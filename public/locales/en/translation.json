@@ -41,7 +41,10 @@
     "save": "Save",
     "edit": "Edit",
     "close": "Close",
-    "apply": "Apply"
+    "apply": "Apply",
+    "back": "Back",
+    "undo": "Undo",
+    "copied": "Copied!"
   },
   "dashboard": {
     "most_used_instrument": "Most used tool",
@@ -89,7 +92,9 @@
     "regen": "Start over",
     "custom_command": "Action",
     "custom_command_description": "Describe action you want to execture on the text result",
-    "custom_command_placeholder": "Ex: Rewrite in Czech"
+    "custom_command_placeholder": "Ex: Rewrite in Czech",
+    "delete_history": "Are you absolutely sure?",
+    "delete_history_description": "This action cannot be undone. This will permanently delete this record."
   },
   "templates": {
     "template_subtitle": "Here you can create your own templates for tools",
@@ -159,13 +164,21 @@
     "positive": "Positive",
     "witty": "Witty",
     "funny": "Funny",
-    "inspiring": "Inspiring"
+    "inspiring": "Inspiring",
+    "select_chat": "Select a chat to start messaging",
+    "delete_all_chats_description": "This action cannot be undone. This will permanently delete                     all chats.",
+    "delete": "Delete",
+    "rename_chat": "Rename",
+    "rename_chat_description": "Type new chat title.",
+    "chat_name": "Title",
+    "delete_chat": "Delete chat",
+    "delete_chat_description": "This action cannot be undone. This will permanently delete the chat."
   },
   "popups": {
     "removeFromFav": "An item has been removed from favourites",
     "addToFav": "New item has been added to favourites",
-    "pin_success": "has been successfully pinned",
-    "unpin_success": "has been successfully unpinned",
+    "pin_success": "New item has been successfully pinned",
+    "unpin_success": "Item has been successfully unpinned",
     "copy_text_success": "The text has been successfully copied",
     "recorddelete": "Record has been deleted"
   },

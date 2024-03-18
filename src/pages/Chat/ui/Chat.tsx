@@ -34,8 +34,10 @@ import {
   sendMessage,
 } from "..";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Chat = () => {
+  const { t } = useTranslation();
   const isMobile = useMediaQuery("(max-width: 1024px)");
   const dispatch = useAppDispatch();
   const chatList = useSelector(selectChats);
@@ -83,7 +85,7 @@ const Chat = () => {
               disabled={chatList.length >= 15}
             >
               <PlusCircleIcon size={14} className="mr-2" />
-              Create new chat
+              {t("chat.create_new_chat")}
             </Button>
             <ScrollArea className="h-chat-card lg:h-[calc(100vh-10rem)] mt-4 lg:pr-2.5 lg:-mr-[11px]  lg:w-auto">
               <div className="flex flex-row lg:flex-col lg:space-y-2 space-x-2 lg:space-x-0">
@@ -101,21 +103,22 @@ const Chat = () => {
                   disabled={chatList.length === 0}
                 >
                   <Trash2Icon size={14} className="mr-2" />
-                  Delete all chats
+                  {t("chat.delete_all_chats")}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogTitle>
+                    {t("chat.delete_all_chats")}
+                  </AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    all chats.
+                    {t("chat.delete_all_chats_description")}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{t("general.back")}</AlertDialogCancel>
                   <AlertDialogAction onClick={() => dispatch(deleteAllChats())}>
-                    Continue
+                    {t("chat.delete")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -136,7 +139,7 @@ const Chat = () => {
                 to={"/"}
               >
                 <ArrowLeftIcon size={12} className="mr-1 mt-0.5" />
-                Back to Dashboard
+                {t("general.back")}
               </Link>
             </div>
           </Navbar>
@@ -164,7 +167,7 @@ const Chat = () => {
                 ) : (
                   <div className="text-center h-full text-gray-500 mt-auto">
                     <AlertCircleIcon size={24} className="mx-auto" />
-                    Select a chat to start messaging
+                    {t("chat.select_chat")}
                   </div>
                 )}
               </div>

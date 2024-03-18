@@ -11,12 +11,13 @@ export const deleteChat = createAsyncThunk<
 >('chat/delete', async (id, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
+    const { i18n } = extra;
     const response = await extra.api.delete<ChatItem>('/chat/' + id);
 
     if (response.status !== 200 || !response.data) {
       return rejectWithValue('Error deleting chat. Please try again.');
     }
-    toast('Chat successfully deleted.');
+    toast(i18n.t('popups.recorddelete'));
     return response.data.id;
   } catch (error) {
     console.log('Error deleting chat: ', error);

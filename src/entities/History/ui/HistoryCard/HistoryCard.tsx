@@ -36,20 +36,20 @@ const HistoryCard: FC<Props> = ({
   expandable = true,
   ...props
 }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const title = titleRef.current?.innerText;
     const content = contentRef.current?.innerText;
     navigator.clipboard.writeText(`${title}\n\n${content}`);
-    toast("Скопировано!", {
-      description: "Текст скопирован в буфер обмена",
+    toast(t("general.copied"), {
+      description: t("popups.copy_text_success"),
       duration: 1000,
     });
   };
@@ -107,16 +107,15 @@ const HistoryCard: FC<Props> = ({
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      Are you absolutely sure?
+                      {t("history.delete_history")}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      this record.
+                      {t("history.delete_history_description")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
-                      Cancel
+                      {t("general.cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={(e) => {
@@ -124,7 +123,7 @@ const HistoryCard: FC<Props> = ({
                         dispatch(deleteHistory(history.id));
                       }}
                     >
-                      Continue
+                      {t("chat.delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

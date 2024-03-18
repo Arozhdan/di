@@ -12,6 +12,7 @@ export const unpinHistory = createAsyncThunk<
 >('instrument/unfavorite', async (history, thunkApi) => {
   const { extra, rejectWithValue, dispatch } = thunkApi;
   try {
+    const { i18n } = extra;
     const response = await extra.api.get("/history/" + history.id + "/unpin");
 
     if (response.status !== 200) {
@@ -19,9 +20,9 @@ export const unpinHistory = createAsyncThunk<
     }
 
     dispatch(historyActions.unpinHistory(history))
-    toast('History record has been unpinned', {
+    toast(i18n.t('popups.unpin_success'), {
       action: {
-        label: 'Undo',
+        label: i18n.t('general.undo'),
         onClick: () => {
           dispatch(pinHistory(history))
         }

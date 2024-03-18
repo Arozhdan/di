@@ -35,12 +35,14 @@ import {
 import { format } from "date-fns";
 import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   chat: ChatItem;
 }
 
 const ChatCard: FC<Props> = ({ chat }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [name, setName] = useState(chat.name);
   const lastMessage =
@@ -75,7 +77,7 @@ const ChatCard: FC<Props> = ({ chat }) => {
       <CardHeader className="pt-3 pb-1 pl-3 pr-0">
         <div className="w-full text-xs text-gray-500 flex items-center">
           <ClockIcon size={12} className="mr-1" />
-          {format(new Date(chat.updatedAt), "EEE, d. HH:mm")}
+          {format(new Date(chat.updatedAt), "d.MM, HH:mm")}
         </div>
         <span className="line-clamp-2 text-xs h-8">
           <b className="uppercase">{chat.name}</b>
@@ -98,19 +100,20 @@ const ChatCard: FC<Props> = ({ chat }) => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <PenIcon size={12} className="mr-1" />
-                <span className="text-xs">Rename</span>
+                <span className="text-xs">{t("chat.rename_chat")}</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Rename chat</DialogTitle>
+                <DialogTitle>{t("chat.rename_chat")}</DialogTitle>
                 <DialogDescription>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Aspernatur, dolorum!
+                  {t("chat.rename_chat_description")}
                 </DialogDescription>
               </DialogHeader>
               <div className="">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">
+                  <span>{t("chat.chat_name")}</span>
+                </Label>
                 <Input
                   id="name"
                   value={name}
@@ -119,10 +122,10 @@ const ChatCard: FC<Props> = ({ chat }) => {
               </div>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="text">Cancel</Button>
+                  <Button variant="text">{t("general.cancel")}</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button onClick={handleRename}>Save changes</Button>
+                  <Button onClick={handleRename}>{t("general.save")}</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
@@ -141,18 +144,17 @@ const ChatCard: FC<Props> = ({ chat }) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>{t("chat.delete_chat")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  chat.
+                  {t("chat.delete_chat_description")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t("general.cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => dispatch(deleteChat(chat.id))}
                 >
-                  Continue
+                  {t("chat.delete")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

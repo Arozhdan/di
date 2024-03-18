@@ -14,13 +14,13 @@ export const favoriteInstrument = createAsyncThunk<
   const { extra, rejectWithValue, dispatch } = thunkApi;
   try {
     const response = await extra.api.get("/instruments/" + instrument.id + "/like");
-
+    const { i18n } = extra;
     if (response.status !== 200) {
       throw new Error()
     }
 
     dispatch(userActions.addToFavorites(instrument))
-    toast('New item has been added to favorites')
+    toast(i18n.t('popups.addToFav'));
   }
   catch (error) {
     console.log('Error fetching instruments: ', error);
