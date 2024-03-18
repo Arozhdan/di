@@ -153,7 +153,8 @@
     "features": "Возможности",
     "unlimited": "Бесконечно",
     "inactive": "Не активна",
-    "active": "Активна"
+    "active": "Активна",
+    "cancel_plan_description": "Вы уверены, что хотите отменить план подписки?"
   },
   "chat": {
     "create_new_chat": "Создать новый чат",
@@ -227,5 +228,9 @@
       "successDescription": "Теперь Вы можете войти в профиль",
       "success": "Пароль был успешно изменен!"
     }
+  },
+  "subscription": {
+    "unsubscribeSuccess": "Подписка отменена!",
+    "unsubscribeSuccessDescription": "Подписка была отменена. В ближайшее время вы получите письмо с подтверждением!"
   }
 }

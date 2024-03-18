@@ -153,7 +153,8 @@
     "features": "Features",
     "unlimited": "Unlimited",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "cancel_plan_description": "Are you sure you want to cancel your subscription plan?"
   },
   "chat": {
     "create_new_chat": "Create new chat",
@@ -228,5 +229,9 @@
       "success": "Password has been successfully updated!",
       "successDescription": "Now you can safely sign in"
     }
+  },
+  "subscription": {
+    "unsubscribeSuccess": "Unsibscribed!",
+    "unsubscribeSuccessDescription": "Subscription has been cancelled. You will receive a confirmational email soon!"
   }
 }

@@ -1,7 +1,16 @@
 import { RoutePath } from "@/app/providers/Router";
-import { selectSubscription } from "@/entities/Subscription";
+import { selectSubscription, unsubscribe } from "@/entities/Subscription";
 import { selectUser } from "@/entities/User";
 import { Typography } from "@/shared/components/Typography/Typography";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import {
   Card,
@@ -26,9 +35,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
-import { cn } from "@/shared/lib/utils";
+import { cn, useAppDispatch } from "@/shared/lib/utils";
 import { withSettingsLayout } from "@/widgets/SettingsLayout";
 import { format } from "date-fns";
+import { AlertOctagonIcon, Undo2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -36,6 +46,7 @@ import { Link } from "react-router-dom";
 export const Billing = () => {
   const { t } = useTranslation();
   const user = useSelector(selectUser);
+  const dispatch = useAppDispatch();
   const subscription = useSelector(selectSubscription);
   const subAllowance =
     subscription?.tier?.allowance === -1
@@ -47,6 +58,9 @@ export const Billing = () => {
       ? 0
       : Math.ceil((user?.monthlyQueries || 0) / subAllowance);
 
+  const handleCancelSubscription = () => {
+    dispatch(unsubscribe());
+  };
   return (
     <div className="container px-0">
       <Typography variant="sectionSubtitle">{t("general.billing")}</Typography>
@@ -167,13 +181,36 @@ export const Billing = () => {
                       {t("settings.change_plan")}
                     </Link>
                   ) : (
-                    <Button
-                      className="w-full md:w-auto"
-                      variant="ghost"
-                      size="sm"
-                    >
-                      {t("settings.cancel_plan")}
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        {t("settings.cancel_plan")}
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogTitle>
+                          {t("settings.cancel_plan")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t("settings.cancel_plan_description")}
+                        </AlertDialogDescription>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>
+                            <Undo2Icon className="w-4 h-4 mr-2" />
+                            {t("general.back")}
+                          </AlertDialogCancel>
+                          <AlertDialogCancel asChild>
+                            <>
+                              <Button
+                                variant="destructive"
+                                onClick={handleCancelSubscription}
+                              >
+                                <AlertOctagonIcon className="w-4 h-4 mr-2" />
+                                {t("settings.cancel_plan")}
+                              </Button>
+                            </>
+                          </AlertDialogCancel>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                 </div>
               </CardFooter>
