@@ -50,7 +50,7 @@ const Subscriptions = () => {
                   <StarIcon size={15} className="text-primary" />
                 )}
                 <Typography variant="sectionSubtitle" as="span">
-                  Basic plan{" "}
+                  {item.tier.name}
                   {item.isFeatured && (
                     <span className="text-primary text-xs">
                       - {t("settings.recommended")}
@@ -92,7 +92,7 @@ const Subscriptions = () => {
                   {t("settings.features")}:
                 </Typography>
                 <div
-                  className="mt-2 list-disc prose prose-sm"
+                  className="mt-2 list-disc prose prose-sm dark:prose-invert"
                   dangerouslySetInnerHTML={
                     { __html: slateToHtml(item.description) } as any
                   }

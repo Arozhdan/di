@@ -156,7 +156,7 @@ export const Billing = () => {
               </CardContent>
               <CardFooter className="border-t py-3">
                 <div className="md:flex md:space-x-2 w-full">
-                  {subscription?.freeTrial ? (
+                  {!subscription || subscription?.freeTrial ? (
                     <Link
                       className={cn(
                         buttonVariants({ size: "sm" }),
