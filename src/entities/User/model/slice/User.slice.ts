@@ -38,7 +38,8 @@ const userSlice = createSlice({
       }
       state.user.totalUsage = state.user.totalUsage ? state.user.totalUsage + action.payload : action.payload
       state.user.monthlyUsage = state.user.monthlyUsage ? state.user.monthlyUsage + action.payload : action.payload
-
+      state.user.totalQueries = state.user.totalQueries ? state.user.totalQueries + 1 : 1
+      state.user.monthlyQueries = state.user.monthlyQueries ? state.user.monthlyQueries + 1 : 1
     },
     reset: () => ({ ...initialState, signedIn: false }),
   },

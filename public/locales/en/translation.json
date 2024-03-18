@@ -68,7 +68,8 @@
     "context_length": "The text for generation must contain between 10 and 400 characters",
     "generate": "Generate",
     "instrument_subtitle": "Our custom prompts for solving a variety of business and marketing challenges",
-    "category": "Category"
+    "category": "Category",
+    "queryLimitExceeded": "You have reached your usage limit. Please upgrade your plan to continue using the service."
   },
   "categories": {
     "sales": "Sales",
