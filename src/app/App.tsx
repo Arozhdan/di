@@ -44,7 +44,7 @@ function App() {
       dispatch(fetchSubscription(userId));
       dispatch(fetchInstruments());
       dispatch(fetchSiteSettings());
-      dispatch(fetchHistory());
+      dispatch(fetchHistory(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, inited, i18n.language, userId]);

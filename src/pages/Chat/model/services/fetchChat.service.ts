@@ -24,7 +24,10 @@ export const fetchChat = createAsyncThunk<
   try {
     const response = await extra.api.get<FetchChatResponse>('/chat', {
       params: {
-        limit: 500,
+        limit: 100,
+        where: {
+          owner: { equals: thunkApi.getState().user.user?.id }
+        }
       },
     });
 

@@ -18,16 +18,21 @@ interface FetchHistoryResponse {
 
 export const fetchHistory = createAsyncThunk<
   History[],
-  undefined,
+  string,
   ThunkConfig<string>
 >(
   'history/fetchHistory',
-  async (_, thunkApi) => {
+  async (userId, thunkApi) => {
     const { extra, rejectWithValue } = thunkApi;
     try {
       const response = await extra.api.get<FetchHistoryResponse>("/history", {
         params: {
-          limit: 500,
+          limit: 100,
+          where: {
+            owner: {
+              equals: userId
+            }
+          }
         },
       });
 
