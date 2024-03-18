@@ -6,12 +6,12 @@ export const $api = axios.create({
 })
 
 // interceptors
-$api.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    console.log("Error from axios interceptor: ", error);
-    return Promise.reject(error)
-  },
-)
+// $api.interceptors.response.use(
+//   (response) => {
+//     return response
+//   },
+//   (error) => {
+//     console.log("Error from axios interceptor: ", error);
+//     return error
+//   },
+// )
