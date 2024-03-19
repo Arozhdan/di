@@ -187,8 +187,8 @@
   "auth": {
     "signin": {
       "title": "Sign in",
-      "subtitle": "Create a new account or in case if you have one, please",
-      "signup": "create a new one",
+      "subtitle": "Sign in to your account or in case if you don't have one, please",
+      "signup": "sign up here.",
       "submit": "Sign in with your email",
       "or": "Or proceed with",
       "tos": "By continuing, you agree to our Terms of Service and Privacy Policy",
