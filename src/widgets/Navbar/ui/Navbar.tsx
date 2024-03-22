@@ -108,7 +108,7 @@ const MobileNavigation = () => {
               </Button>
             </div>
             <div>
-              <div className="mt-10">
+              <div className="my-10">
                 <div className="space-y-1 mb-3">
                   <b className="text-sm">{t("general.my_usage")}:</b>
                   <br />
