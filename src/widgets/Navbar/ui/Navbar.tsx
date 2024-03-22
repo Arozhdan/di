@@ -1,14 +1,14 @@
 import { FC, memo, useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
-import { cn, useMediaQuery } from "@/shared/lib/utils";
+import { cn, useAppDispatch, useMediaQuery } from "@/shared/lib/utils";
 
 import {
   BookMarkedIcon,
   BotIcon,
   LayoutDashboardIcon,
+  LogOutIcon,
   MenuIcon,
   MessagesSquareIcon,
-  PencilRulerIcon,
   SearchIcon,
   Settings2Icon,
 } from "lucide-react";
@@ -17,8 +17,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/shared/components/ui/sheet";
 import { RoutePath } from "@/app/providers/Router";
@@ -26,46 +24,55 @@ import { Link } from "react-router-dom";
 import { Progress } from "@/shared/components/ui/progress";
 import { GlobalSearch } from "@/features/GlobalSearch";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { selectSubscription } from "@/entities/Subscription";
+import { selectUser } from "@/entities/User";
+import { signout } from "@/features/AuthLocal";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-const links = [
-  {
-    title: "Dashboard",
-    url: RoutePath.main,
-    icon: LayoutDashboardIcon,
-  },
-  {
-    title: "Instruments",
-    url: RoutePath.instruments,
-    icon: BotIcon,
-  },
-  {
-    title: "History",
-    url: RoutePath.history,
-    icon: BookMarkedIcon,
-  },
-  {
-    title: "Templates",
-    url: RoutePath.templates,
-    icon: PencilRulerIcon,
-  },
-  {
-    title: "Settings",
-    url: RoutePath.profile_settings,
-    icon: Settings2Icon,
-  },
-  {
-    title: "ChatPRO",
-    url: RoutePath.chat,
-    icon: MessagesSquareIcon,
-  },
-];
-
 const MobileNavigation = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const subscription = useSelector(selectSubscription);
+  const user = useSelector(selectUser);
+  const subAllowance =
+    subscription?.tier?.allowance === -1
+      ? "∞"
+      : subscription?.tier?.allowance || 0;
+  const persentage =
+    typeof subAllowance === "string"
+      ? 0
+      : Math.ceil(((user?.monthlyQueries || 0) * 100) / subAllowance);
+  const links = [
+    {
+      title: t("general.dashboard"),
+      url: RoutePath.main,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: t("general.instruments"),
+      url: RoutePath.instruments,
+      icon: BotIcon,
+    },
+    {
+      title: t("general.history"),
+      url: RoutePath.history,
+      icon: BookMarkedIcon,
+    },
+    {
+      title: t("general.settings"),
+      url: RoutePath.profile_settings,
+      icon: Settings2Icon,
+    },
+    {
+      title: t("general.chatPRO"),
+      url: RoutePath.chat,
+      icon: MessagesSquareIcon,
+    },
+  ];
   return (
     <Sheet>
       <SheetTrigger>
@@ -74,12 +81,9 @@ const MobileNavigation = () => {
           <MenuIcon className="ml-2 h-4 w-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent className="h-screen flex flex-col">
-        <SheetHeader>
-          <SheetTitle>{t("general.menu")}</SheetTitle>
-        </SheetHeader>
+      <SheetContent>
         <SheetDescription asChild>
-          <div className="flex-1 flex flex-col">
+          <div className="h-screen flex flex-col justify-between py-10">
             <div className="block space-y-4">
               {links.map((link) => (
                 <Link
@@ -94,20 +98,24 @@ const MobileNavigation = () => {
                   {link.title}
                 </Link>
               ))}
+              <Button
+                className="w-full justify-start items-center"
+                variant="destructive"
+                onClick={() => dispatch(signout())}
+              >
+                <LogOutIcon size={12} className="mr-2" />
+                {t("general.sign_out")}
+              </Button>
             </div>
-            <div className="mt-auto">
+            <div>
               <div className="mt-10">
                 <div className="space-y-1 mb-3">
-                  <b className="text-sm">Subscription:</b> <br />
-                  <Link className="underline" to="/">
-                    Basic Subscription
-                  </Link>
-                </div>
-                <div className="space-y-1">
-                  <b className="text-sm">{t("general.my_usage")}</b>
+                  <b className="text-sm">{t("general.my_usage")}:</b>
                   <br />
-                  <small className="text-xs">(33 / 100)</small>
-                  <Progress value={33} className="h-2" />
+                  <small className="text-xs">
+                    ({user?.monthlyQueries || 0} / {subAllowance})
+                  </small>
+                  <Progress value={persentage} className="h-2" />
                 </div>
               </div>
             </div>
