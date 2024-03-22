@@ -7,6 +7,7 @@ const initialState: SubscriptionSchema = {
   data: null,
   loading: false,
   error: null,
+  billing: []
 }
 
 const subscriptionSlice = createSlice({
