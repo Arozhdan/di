@@ -91,7 +91,7 @@
     "rewrite": "Переписать",
     "custom": "Свой вариант",
     "regen": "Начать заново",
-    "custom_command": "Комманда",
+    "custom_command": "Команда",
     "custom_command_description": "Опишите команду для редактирования результата",
     "custom_command_placeholder": "Ex: Перепиши на английском языке",
     "delete_history": "Вы абсолютно уверены?",
