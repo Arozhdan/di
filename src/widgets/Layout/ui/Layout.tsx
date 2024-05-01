@@ -19,6 +19,8 @@ import {
 
 import { LOCAL_STORAGE } from "@lib/consts";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { selectSubscription } from "@/entities/Subscription";
 
 interface Props {
   children: React.ReactNode;
@@ -26,6 +28,8 @@ interface Props {
 
 export const Layout: FC<Props> = ({ children }) => {
   const { t } = useTranslation();
+  const subscription = useSelector(selectSubscription);
+  const allowChat = subscription?.tier.allowChat || false;
   let defaultSidebarSize = 12;
 
   const links = [
@@ -59,6 +63,7 @@ export const Layout: FC<Props> = ({ children }) => {
       title: t("general.chatPRO"),
       url: RoutePath.chat,
       icon: MessagesSquareIcon,
+      disabled: !allowChat,
     },
   ];
 

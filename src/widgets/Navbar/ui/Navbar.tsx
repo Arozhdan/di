@@ -37,6 +37,7 @@ const MobileNavigation = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const subscription = useSelector(selectSubscription);
+  const allowChat = subscription?.tier.allowChat || false;
   const user = useSelector(selectUser);
   const subAllowance =
     subscription?.tier?.allowance === -1
@@ -71,6 +72,7 @@ const MobileNavigation = () => {
       title: t("general.chatPRO"),
       url: RoutePath.chat,
       icon: MessagesSquareIcon,
+      disabled: !allowChat,
     },
   ];
   return (
@@ -85,19 +87,30 @@ const MobileNavigation = () => {
         <SheetDescription asChild>
           <div className="h-screen flex flex-col justify-between py-10">
             <div className="block space-y-4">
-              {links.map((link) => (
-                <Link
-                  key={link.url}
-                  to={link.url}
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "w-full justify-start items-center"
-                  )}
-                >
-                  <link.icon className="mr-2 h-4 w-4" />
-                  {link.title}
-                </Link>
-              ))}
+              {links.map((link) =>
+                link.disabled ? (
+                  <Button
+                    key={link.url}
+                    className="w-full justify-start items-center"
+                    disabled
+                  >
+                    <link.icon className="mr-2 h-4 w-4" />
+                    {link.title}
+                  </Button>
+                ) : (
+                  <Link
+                    key={link.url}
+                    to={link.url}
+                    className={cn(
+                      buttonVariants({ variant: "default" }),
+                      "w-full justify-start items-center"
+                    )}
+                  >
+                    <link.icon className="mr-2 h-4 w-4" />
+                    {link.title}
+                  </Link>
+                )
+              )}
               <Button
                 className="w-full justify-start items-center"
                 variant="destructive"
