@@ -153,7 +153,7 @@ const SingleInstrument = () => {
   }, [form, onSubmit]);
 
   useEffect(() => {
-    if (isMobile && drawerTriggerRef.current) {
+    if (isMobile && drawerTriggerRef.current && historyLength > 0) {
       drawerTriggerRef.current.click();
     }
   }, [isMobile, historyLength]);
