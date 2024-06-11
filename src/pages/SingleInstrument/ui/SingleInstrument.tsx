@@ -63,7 +63,7 @@ const formSchema = z.object({
   input: z
     .string()
     .min(10, "Минимум 10 символов")
-    .max(400, "Максимум 400 символов"),
+    .max(1000, "Максимум 1000 символов"),
   language: z.enum(["russian", "english"]),
   tov: z.enum([
     "professional",
@@ -104,9 +104,9 @@ const SingleInstrument = () => {
   });
 
   const onSubmit = useCallback(
-    (values: FormValues) => {
+    async (values: FormValues) => {
       if (!instrumentId) return;
-      dispatch(
+      await dispatch(
         generateQuery({
           input: values.input,
           instrumentId: instrumentId,
@@ -114,8 +114,12 @@ const SingleInstrument = () => {
           tov: values.tov,
         })
       );
+
+      if (isMobile) {
+        drawerTriggerRef.current?.click();
+      }
     },
-    [dispatch, instrumentId]
+    [dispatch, instrumentId, isMobile]
   );
   const instrument = useSelector((state: StateSchema) =>
     selectInstrumentById(state, instrumentId)
@@ -126,8 +130,6 @@ const SingleInstrument = () => {
   const history = useSelector((state: StateSchema) =>
     selectHistoryByInstrument(state, instrumentId)
   );
-  const historyLength = history.length;
-
   const generating = useSelector(isGenerating);
 
   const historyToRender = useCallback(() => {
@@ -151,12 +153,6 @@ const SingleInstrument = () => {
       });
     };
   }, [form, onSubmit]);
-
-  useEffect(() => {
-    if (isMobile && drawerTriggerRef.current && historyLength > 0) {
-      drawerTriggerRef.current.click();
-    }
-  }, [isMobile, historyLength]);
 
   if (isInstrumentLoading) return <PageLoader />;
   if (!instrument) return null;
@@ -187,7 +183,7 @@ const SingleInstrument = () => {
               className="col-span-3 flex flex-col relative"
               onSubmit={form.handleSubmit(onSubmit)}
             >
-              {generating && <GenerateOverlay />}
+              <GenerateOverlay />
               <div>
                 <Typography variant="sectionSubtitle">
                   {instrument.name}
@@ -208,8 +204,8 @@ const SingleInstrument = () => {
                   >
                     <StarIcon size={14} className="mr-2" />
                     {isFavorited
-                      ? t("instrument.add_to_fav")
-                      : t("instrument.remove_from_fav")}
+                      ? t("instrument.remove_from_fav")
+                      : t("instrument.add_to_fav")}
                   </Toggle>
                 </div>
                 <Tooltip>

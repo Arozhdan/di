@@ -1,5 +1,5 @@
 .card {
-  @apply cursor-pointer transition h-card hover:border-primary/30 flex flex-col;
+  @apply cursor-pointer transition h-card-taller hover:border-primary/30 flex flex-col;
 }
 .expanded {
   @apply h-auto;

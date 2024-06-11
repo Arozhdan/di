@@ -65,7 +65,7 @@
     "add_to_fav": "Add to favourites",
     "remove_from_fav": "Remove from favourites",
     "only_fav": "Only favourites",
-    "context_length": "The text for generation must contain between 10 and 400 characters",
+    "context_length": "The text for generation must contain between 10 and 1000 characters",
     "generate": "Generate",
     "instrument_subtitle": "Our custom prompts for solving a variety of business and marketing challenges",
     "category": "Category",

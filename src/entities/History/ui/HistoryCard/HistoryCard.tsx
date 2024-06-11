@@ -148,6 +148,9 @@ const HistoryCard: FC<Props> = ({
           >
             {history.instrument.name}
           </Link>
+          <span className="inline-block text-xs text-gray-500">
+            {format(new Date(history.createdAt), "dd.MM.yyyy, HH:mm")}
+          </span>
         </CardHeader>
         <CardContent className={cn(styles.content)}>
           <div
@@ -175,9 +178,10 @@ const HistoryCard: FC<Props> = ({
             >
               {isExpanded ? t("general.collapse") : t("general.expand")}
             </Button>
-            <span className="inline-block ml-auto text-xs text-gray-500">
-              {format(new Date(history.createdAt), "dd.MM.yyyy, HH:mm")}
-            </span>
+
+            <Button variant={"link"} onClick={handleClick} className="ml-auto">
+              {t("general.edit")}
+            </Button>
           </CardFooter>
         )}
       </Card>

@@ -9,7 +9,7 @@ export const selectTimeSaved = (state: StateSchema, total?: number): Data | null
 
   const settings = state.siteSettings.data
   if (!settings) return null
-  const timeSaved = total * settings.timePerQuery / 60
+  const timeSaved = Math.ceil(total * settings.timePerQuery / 60)
   return {
     value: timeSaved,
     average: settings.timePerQuery

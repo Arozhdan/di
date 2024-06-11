@@ -74,6 +74,7 @@ module.exports = {
       height: {
         navbar: "var(--navbar-height)",
         card: "var(--card-height)",
+        'card-taller': "var(--card-taller-height)",
         'chat-card': "var(--chat-card-height)",
       }
     },

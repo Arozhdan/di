@@ -17,9 +17,15 @@ export const GenerateOverlay = () => {
   });
 
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-accent/50 w-full max-w-[520px] px-10 py-40">
-      <div className="flex items-center justify-center space-x-2">
-        <div className="text-3xl font-semibold text-white">{text}</div>
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-accent w-full max-w-[520px] px-10 py-40">
+      <div className="flex flex-col items-center justify-center space-x-2">
+        <img
+          src="/logo-small.svg"
+          alt="Loading..."
+          className="rounded-md h-14 w-14 animate-spin mb-3"
+          role="status"
+        />
+        <div className="text-xl text-white">{text}</div>
       </div>
     </div>
   );
