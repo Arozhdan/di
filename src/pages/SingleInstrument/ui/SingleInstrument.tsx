@@ -183,7 +183,7 @@ const SingleInstrument = () => {
               className="col-span-3 flex flex-col relative"
               onSubmit={form.handleSubmit(onSubmit)}
             >
-              <GenerateOverlay />
+              {generating && <GenerateOverlay />}
               <div>
                 <Typography variant="sectionSubtitle">
                   {instrument.name}
